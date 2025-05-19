@@ -2,46 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Clothing Store - Purchase</title>
+  <title>Uncle Funkle's House of Sprinch - Checkout</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    .cart { border: 1px solid #ccc; padding: 20px; width: 350px; }
-    .cart h2 { margin-top: 0; }
-    .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
-    .total { font-weight: bold; }
-    .buy-btn { background: #0070f3; color: #fff; border: none; padding: 10px 20px; cursor: pointer; }
-    .buy-btn:disabled { background: #aaa; }
-    .msg { margin-top: 20px; }
+    body {
+      background: #f7f7fa;
+      font-family: 'Montserrat', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .banner {
+      background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
+      color: #222;
+      padding: 30px 0 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      position: relative;
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 50%;
+      display: inline-block;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      background-image: url('https://img.icons8.com/emoji/96/000000/t-shirt-emoji.png');
+      background-size: 60px 60px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .store-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 10px 0 0 0;
+      letter-spacing: 2px;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: #444;
+      margin-top: 5px;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+    .container {
+      max-width: 420px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 32px 32px 24px 32px;
+    }
+    .cart-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: #222;
+      letter-spacing: 1px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .cart-item:last-child {
+      margin-bottom: 0;
+    }
+    .total {
+      font-weight: 700;
+      font-size: 1.2rem;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      margin-top: 18px;
+      color: #222;
+    }
+    .buy-btn {
+      width: 100%;
+      background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 16px 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 28px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.2s, color 0.2s;
+    }
+    .buy-btn:disabled {
+      background: #eee;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    .msg {
+      margin-top: 18px;
+      font-size: 1rem;
+      color: #008800;
+      text-align: center;
+      min-height: 24px;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.95rem;
+      margin: 40px 0 10px 0;
+    }
+    @media (max-width: 500px) {
+      .container { padding: 18px 6px 18px 6px; }
+      .store-title { font-size: 1.5rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="cart">
-    <h2>Your Cart</h2>
-    <div class="cart-item"><span>T-Shirt</span><span>$20</span></div>
-    <div class="cart-item"><span>Jeans</span><span>$40</span></div>
-    <div class="cart-item"><span>Socks (3 pack)</span><span>$10</span></div>
+  <div class="banner">
+    <div class="logo"></div>
+    <div class="store-title">Uncle Funkle's House of Sprinch</div>
+    <div class="subtitle">The freshest fits for the sprinchiest folks</div>
+  </div>
+  <div class="container">
+    <div class="cart-title">Your Cart</div>
+    <div class="cart-item"><span>Sprinch T-Shirt</span><span>$20</span></div>
+    <div class="cart-item"><span>Funkle Jeans</span><span>$40</span></div>
+    <div class="cart-item"><span>House Socks (3 pack)</span><span>$10</span></div>
     <div class="total cart-item"><span>Total</span><span>$70</span></div>
     <button class="buy-btn" id="buyBtn">Buy Now</button>
     <div class="msg" id="msg"></div>
+  </div>
+  <div class="footer">
+    &copy; 2025 Uncle Funkle's House of Sprinch. All rights reserved.
   </div>
   <script>
     const changeEventUrl = "https://events.pagerduty.com/integration/8c066549b0e04e01c03147353714ffcf/change/enqueue";
 
     document.getElementById('buyBtn').onclick = async function() {
       this.disabled = true;
-      document.getElementById('msg').textContent = "Processing purchase...";
+      document.getElementById('msg').style.color = "#444";
+      document.getElementById('msg').textContent = "Processing your sprinch purchase...";
 
-      // Prepare the Change Event payload
       const payload = {
         payload: {
-          summary: "User purchased items",
+          summary: "User purchased items from Uncle Funkle's House of Sprinch",
           timestamp: new Date().toISOString(),
-          source: "demo-clothing-store.github.io",
+          source: "uncle-funkles-sprinch-store.github.io",
           custom_details: {
             cart: [
-              { item: "T-Shirt", price: 20 },
-              { item: "Jeans", price: 40 },
-              { item: "Socks (3 pack)", price: 10 }
+              { item: "Sprinch T-Shirt", price: 20 },
+              { item: "Funkle Jeans", price: 40 },
+              { item: "House Socks (3 pack)", price: 10 }
             ],
             total: 70,
             user: "demo-user"
@@ -56,11 +167,14 @@
           body: JSON.stringify(payload)
         });
         if (res.ok) {
+          document.getElementById('msg').style.color = "#008800";
           document.getElementById('msg').textContent = "Purchase complete! Change event sent to PagerDuty.";
         } else {
+          document.getElementById('msg').style.color = "#cc0000";
           document.getElementById('msg').textContent = "Failed to send change event. Check your integration.";
         }
       } catch (e) {
+        document.getElementById('msg').style.color = "#cc0000";
         document.getElementById('msg').textContent = "Error: " + e.message;
       }
       this.disabled = false;
