@@ -150,7 +150,7 @@
       document.getElementById('msg').textContent = "Processing your sprinch purchase...";
 
       try {
-        const res = await fetch("http://localhost:3000/send-change-and-incident", {
+        const res = await fetch("https://tarry-wealthy-group.glitch.me/send-change-and-incident", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cart, total, user })
