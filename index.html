@@ -2,173 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Uncle Funkle's House of Sprinch - Checkout</title>
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <title>Fake Storefront</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      background: #f7f7fa;
-      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(120deg, #f7f7f7 0%, #e3e8ff 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
     }
-    .banner {
-      background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
-      color: #222;
+    .header {
+      background: #222e50;
+      color: #fff;
       padding: 30px 0 20px 0;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      font-size: 2.5em;
+      letter-spacing: 2px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #222e5022;
+    }
+    .storefront {
+      background: #fff;
+      max-width: 400px;
+      margin: 60px auto 0 auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px #222e5022;
+      padding: 32px 32px 24px 32px;
+      text-align: center;
       position: relative;
     }
-    .logo {
-      width: 80px;
-      height: 80px;
-      background: #fff;
-      border-radius: 50%;
-      display: inline-block;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-      background-image: url('https://img.icons8.com/emoji/96/0000/t-shirt-emoji.png');
-      background-size: 60px 60px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    .store-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin: 10px 0 0 0;
-      letter-spacing: 2px;
-    }
-    .subtitle {
-      font-size: 1.1rem;
-      color: #444;
-      margin-top: 5px;
-      font-weight: 400;
-      letter-spacing: 1px;
-    }
-    .container {
-      max-width: 420px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      padding: 32px 32px 24px 32px;
-    }
-    .cart-title {
-      font-size: 1.4rem;
-      font-weight: 600;
+    .product-img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
       margin-bottom: 18px;
-      color: #222;
-      letter-spacing: 1px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #222e5011;
+      background: #f3f6ff;
+      display: inline-block;
     }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      font-size: 1.1rem;
-      color: #333;
+    .product-title {
+      font-size: 1.6em;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #222e50;
     }
-    .cart-item:last-child {
-      margin-bottom: 0;
+    .product-desc {
+      color: #555;
+      font-size: 1.05em;
+      margin-bottom: 18px;
     }
-    .total {
+    .product-price {
+      font-size: 1.3em;
+      color: #0070f3;
       font-weight: 700;
-      font-size: 1.2rem;
-      border-top: 1px solid #eee;
-      padding-top: 12px;
-      margin-top: 18px;
-      color: #222;
+      margin-bottom: 24px;
+      display: block;
     }
-    .buy-btn {
-      width: 100%;
-      background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
-      color: #222;
+    #buyBtn {
+      font-size: 1.15em;
+      padding: 12px 38px;
+      background: linear-gradient(90deg, #0070f3 0%, #222e50 100%);
+      color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 16px 0;
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-top: 28px;
+      border-radius: 6px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      transition: background 0.2s, color 0.2s;
+      font-weight: 600;
+      box-shadow: 0 2px 8px #0070f322;
+      transition: background 0.2s;
     }
-    .buy-btn:disabled {
-      background: #eee;
-      color: #aaa;
-      cursor: not-allowed;
+    #buyBtn:active {
+      background: linear-gradient(90deg, #005bb5 0%, #1a1f3c 100%);
     }
-    .msg {
-      margin-top: 18px;
-      font-size: 1rem;
-      color: #008800;
-      text-align: center;
+    #status {
+      margin-top: 28px;
+      font-size: 1.08em;
+      color: #333;
       min-height: 24px;
+      transition: color 0.2s;
     }
     .footer {
       text-align: center;
       color: #888;
-      font-size: 0.95rem;
-      margin: 40px 0 10px 0;
+      font-size: 1em;
+      margin: 60px 0 20px 0;
     }
     @media (max-width: 500px) {
-      .container { padding: 18px 6px 18px 6px; }
-      .store-title { font-size: 1.5rem; }
+      .storefront {
+        max-width: 95vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+      .header {
+        font-size: 2em;
+        padding: 18px 0 12px 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="banner">
-    <div class="logo"></div>
-    <div class="store-title">Uncle Funkle's House of Sprinch</div>
-    <div class="subtitle">The freshest fits for the sprinchiest folks</div>
-  </div>
-  <div class="container">
-    <div class="cart-title">Your Cart</div>
-    <div class="cart-item"><span>Sprinch T-Shirt</span><span>$20</span></div>
-    <div class="cart-item"><span>Funkle Jeans</span><span>$40</span></div>
-    <div class="cart-item"><span>House Socks (3 pack)</span><span>$10</span></div>
-    <div class="total cart-item"><span>Total</span><span>$70</span></div>
-    <button class="buy-btn" id="buyBtn">Buy Now</button>
-    <div class="msg" id="msg"></div>
+  <div class="header">Paddy Lostys Breakfast Club</div>
+  <div class="storefront">
+    <img class="product-img" src="https://placehold.co/180x180?text=Maureens Fry" alt="A packet of peanuts">
+    <div class="product-title">About 45 Pints</div>
+    <div class="product-desc">No Shtoppin Me</div>
+    <span class="product-price">About 10 more anyway</span>
+    <button id="buyBtn">Buy Now</button>
+    <div id="status"></div>
   </div>
   <div class="footer">
-    &copy; 2025 Uncle Funkle's House of Sprinch. All rights reserved.
+    &copy; Paddy Lostys Breakfast Club &mdash; For demo purposes only
   </div>
   <script>
-    const cart = [
-      { item: "Sprinch T-Shirt", price: 20 },
-      { item: "Funkle Jeans", price: 40 },
-      { item: "House Socks (3 pack)", price: 10 }
-    ];
-    const total = 70;
-    const user = "demo-user";
-
-    document.getElementById('buyBtn').onclick = async function() {
-      this.disabled = true;
-      document.getElementById('msg').style.color = "#444";
-      document.getElementById('msg').textContent = "Processing your sprinch purchase...";
-
-      try {
-        const res = await fetch("https://tarry-wealthy-group.glitch.me/send-change-and-incident", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cart, total, user })
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          document.getElementById('msg').style.color = "#008800";
-          document.getElementById('msg').textContent = "Purchase complete! Change event sent, incident triggered after 15 seconds.";
-        } else {
-          document.getElementById('msg').style.color = "#cc0000";
-          document.getElementById('msg').textContent = "Error: " + (data.error || "Unknown error");
-        }
-      } catch (e) {
-        document.getElementById('msg').style.color = "#cc0000";
-        document.getElementById('msg').textContent = "Error: " + e.message;
-      }
-      this.disabled = false;
+    document.getElementById('buyBtn').onclick = function() {
+      document.getElementById('status').textContent = 'Processing purchase...';
+      document.getElementById('status').style.color = '#333';
+      fetch('https://tarry-wealthy-group.glitch.me/send-change-event', {
+        method: 'POST'
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('status').textContent = 'Unknown Error: When i do go at it';
+        document.getElementById('status').style.color = '#ba0001';
+      })
+      .catch(err => {
+        document.getElementById('status').textContent = 'Error: ' + err;
+        document.getElementById('status').style.color = '#d32f2f';
+      });
     };
   </script>
 </body>
