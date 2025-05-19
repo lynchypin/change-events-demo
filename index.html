@@ -103,15 +103,15 @@
 <body>
   <div class="header">Paddy Lostys Breakfast Club</div>
   <div class="storefront">
-    <img class="product-img" src="https://placehold.co/180x180?text=Maureens Fry" alt="A packet of peanuts">
-    <div class="product-title">About 45 Pints</div>
-    <div class="product-desc">No Shtoppin Me</div>
-    <span class="product-price">About 10 more anyway</span>
+    <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
+    <div class="product-title">Maureens Fry</div>
+    <div class="product-desc">After about 45 pints theres no better fry than Maureens.</div>
+    <span class="product-price">The shirt of any mans back</span>
     <button id="buyBtn">Buy Now</button>
     <div id="status"></div>
   </div>
   <div class="footer">
-    &copy; Paddy Lostys Breakfast Club &mdash; For demo purposes only
+    &copy; Paddy Lostys Breakfast Club &mdash; 
   </div>
   <script>
     document.getElementById('buyBtn').onclick = function() {
@@ -122,7 +122,7 @@
       })
       .then(res => res.json())
       .then(data => {
-        document.getElementById('status').textContent = 'Unknown Error: When i do go at it';
+        document.getElementById('status').textContent = 'Unknown Error: purchase failed';
         document.getElementById('status').style.color = '#ba0001';
       })
       .catch(err => {
