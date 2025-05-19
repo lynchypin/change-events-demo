@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clothing Store - Purchase</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .cart { border: 1px solid #ccc; padding: 20px; width: 350px; }
+    .cart h2 { margin-top: 0; }
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .total { font-weight: bold; }
+    .buy-btn { background: #0070f3; color: #fff; border: none; padding: 10px 20px; cursor: pointer; }
+    .buy-btn:disabled { background: #aaa; }
+    .msg { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="cart">
+    <h2>Your Cart</h2>
+    <div class="cart-item"><span>T-Shirt</span><span>$20</span></div>
+    <div class="cart-item"><span>Jeans</span><span>$40</span></div>
+    <div class="cart-item"><span>Socks (3 pack)</span><span>$10</span></div>
+    <div class="total cart-item"><span>Total</span><span>$70</span></div>
+    <button class="buy-btn" id="buyBtn">Buy Now</button>
+    <div class="msg" id="msg"></div>
+  </div>
+  <script>
+    const changeEventUrl = "https://events.pagerduty.com/integration/8c066549b0e04e01c03147353714ffcf/change/enqueue";
+
+    document.getElementById('buyBtn').onclick = async function() {
+      this.disabled = true;
+      document.getElementById('msg').textContent = "Processing purchase...";
+
+      // Prepare the Change Event payload
+      const payload = {
+        payload: {
+          summary: "User purchased items",
+          timestamp: new Date().toISOString(),
+          source: "demo-clothing-store.github.io",
+          custom_details: {
+            cart: [
+              { item: "T-Shirt", price: 20 },
+              { item: "Jeans", price: 40 },
+              { item: "Socks (3 pack)", price: 10 }
+            ],
+            total: 70,
+            user: "demo-user"
+          }
+        }
+      };
+
+      try {
+        const res = await fetch(changeEventUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          document.getElementById('msg').textContent = "Purchase complete! Change event sent to PagerDuty.";
+        } else {
+          document.getElementById('msg').textContent = "Failed to send change event. Check your integration.";
+        }
+      } catch (e) {
+        document.getElementById('msg').textContent = "Error: " + e.message;
+      }
+      this.disabled = false;
+    };
+  </script>
+</body>
+</html>
