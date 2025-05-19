@@ -136,82 +136,33 @@
     &copy; 2025 Uncle Funkle's House of Sprinch. All rights reserved.
   </div>
   <script>
-    // Change Event (Recent Changes)
-    const changeEventUrl = "https://events.pagerduty.com/integration/8c066549b0e04e01c03147353714ffcf/change/enqueue";
-    // Incident Event (Incidents)
-    const incidentEventUrl = "https://events.pagerduty.com/v2/enqueue";
-    // Your Events API v2 Integration Key for incidents
-    const routingKey = "7422907327f5410dc0199e9bcdc5641a";
+    const cart = [
+      { item: "Sprinch T-Shirt", price: 20 },
+      { item: "Funkle Jeans", price: 40 },
+      { item: "House Socks (3 pack)", price: 10 }
+    ];
+    const total = 70;
+    const user = "demo-user";
 
     document.getElementById('buyBtn').onclick = async function() {
       this.disabled = true;
       document.getElementById('msg').style.color = "#444";
       document.getElementById('msg').textContent = "Processing your sprinch purchase...";
 
-      // Prepare the Change Event payload (Recent Changes)
-      const changePayload = {
-        payload: {
-          summary: "User purchased items from Uncle Funkle's House of Sprinch",
-          timestamp: new Date().toISOString(),
-          source: "uncle-funkles-sprinch-store.github.io",
-          custom_details: {
-            cart: [
-              { item: "Sprinch T-Shirt", price: 20 },
-              { item: "Funkle Jeans", price: 40 },
-              { item: "House Socks (3 pack)", price: 10 }
-            ],
-            total: 70,
-            user: "demo-user"
-          }
-        }
-      };
-
-      // Prepare the Incident Trigger payload (Incidents)
-      const incidentPayload = {
-        routing_key: routingKey,
-        event_action: "trigger",
-        payload: {
-          summary: "Sprinch Store: Purchase triggered an incident",
-          source: "uncle-funkles-sprinch-store.github.io",
-          severity: "critical",
-          urgency: "high",
-          custom_details: {
-            cart: [
-              { item: "Sprinch T-Shirt", price: 20 },
-              { item: "Funkle Jeans", price: 40 },
-              { item: "House Socks (3 pack)", price: 10 }
-            ],
-            total: 70,
-            user: "demo-user"
-          }
-        },
-        priority: {
-          id: "P1",
-          summary: "P1"
-        }
-      };
-
       try {
-        // Send Change Event
-        await fetch(changeEventUrl, {
+        const res = await fetch("http://localhost:3000/send-change-and-incident", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(changePayload)
+          body: JSON.stringify({ cart, total, user })
         });
-
-        // Send Incident Trigger
-        const res = await fetch(incidentEventUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(incidentPayload)
-        });
+        const data = await res.json();
 
         if (res.ok) {
           document.getElementById('msg').style.color = "#008800";
-          document.getElementById('msg').textContent = "Purchase complete! Change event and incident sent to PagerDuty.";
+          document.getElementById('msg').textContent = "Purchase complete! Change event sent, incident triggered after 15 seconds.";
         } else {
           document.getElementById('msg').style.color = "#cc0000";
-          document.getElementById('msg').textContent = "Incident failed to trigger. Check your incident integration key.";
+          document.getElementById('msg').textContent = "Error: " + (data.error || "Unknown error");
         }
       } catch (e) {
         document.getElementById('msg').style.color = "#cc0000";
