@@ -24,13 +24,30 @@
     }
     .storefront {
       background: #fff;
-      max-width: 400px;
+      max-width: 900px;
       margin: 60px auto 0 auto;
       border-radius: 16px;
       box-shadow: 0 4px 24px #222e5022;
       padding: 32px 32px 24px 32px;
+      /* NEW: Use grid for columns */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px 24px;
       text-align: center;
       position: relative;
+    }
+    .product {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #222e5011;
+      padding: 18px 12px 24px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .product:hover {
+      box-shadow: 0 6px 24px #222e5022;
     }
     .product-img {
       width: 180px;
@@ -38,12 +55,12 @@
       object-fit: contain;
       margin-bottom: 18px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px #222e5011;
       background: #f3f6ff;
-      display: inline-block;
+      display: block;
+      box-shadow: none;
     }
     .product-title {
-      font-size: 1.6em;
+      font-size: 1.25em;
       font-weight: 600;
       margin-bottom: 8px;
       color: #222e50;
@@ -57,7 +74,7 @@
       font-size: 1.3em;
       color: #0070f3;
       font-weight: 700;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
       display: block;
     }
     #buyBtn {
@@ -76,6 +93,7 @@
       background: linear-gradient(90deg, #005bb5 0%, #1a1f3c 100%);
     }
     #status {
+      grid-column: 1 / -1;
       margin-top: 28px;
       font-size: 1.08em;
       color: #333;
@@ -88,10 +106,16 @@
       font-size: 1em;
       margin: 60px 0 20px 0;
     }
-    @media (max-width: 500px) {
+    @media (max-width: 900px) {
       .storefront {
-        max-width: 95vw;
-        padding: 18px 4vw 18px 4vw;
+        max-width: 98vw;
+        padding: 18px 2vw 18px 2vw;
+      }
+    }
+    @media (max-width: 600px) {
+      .storefront {
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
       .header {
         font-size: 2em;
@@ -103,36 +127,41 @@
 <body>
   <div class="header">Paddy Lostys Breakfast Club</div>
   <div class="storefront">
-    <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
- <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
- <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
- <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
- <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
-    <div class="product-title">Maureens Fry</div>
-    <div class="product-desc">Maureen'd have the fry on and I go ahit agin</div>
-    <span class="product-price">15.99</span>
-    <button id="buyBtn">Buy Now</button>
-
-    <div class="product-title">Packet of crips</div>
-    <div class="product-desc">An aul packet a Taytos</div>
-    <span class="product-price">15.99</span>
-    <button id="buyBtn">Buy Now</button>
-
-    <div class="product-title">Peanuts</div>
-    <div class="product-desc">Or a packet of peanuts</div>
-    <span class="product-price">15.99</span>
-    <button id="buyBtn">Buy Now</button>
-
-    <div class="product-title">45 Pints</div>
-    <div class="product-desc">Era sure id have about 45 more innyeh</div>
-    <span class="product-price">15.99</span>
-    <button id="buyBtn">Buy Now</button>
-
-    <div class="product-title">The shirt Off Any Mans Back</div>
-    <div class="product-desc">No bother to me</div>
-    <span class="product-price">Him Saying Otherwise</span>
-    <button id="buyBtn">Buy Now</button>
-
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Maureen's Fry">
+      <div class="product-title">Maureens Fry</div>
+      <div class="product-desc">Maureen'd have the fry on and I go ahit agin</div>
+      <span class="product-price">15.99</span>
+      <button id="buyBtn">Buy Now</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Packet of crips">
+      <div class="product-title">Packet of crips</div>
+      <div class="product-desc">An aul packet a Taytos</div>
+      <span class="product-price">15.99</span>
+      <button id="buyBtn">Buy Now</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="Peanuts">
+      <div class="product-title">Peanuts</div>
+      <div class="product-desc">Or a packet of peanuts</div>
+      <span class="product-price">15.99</span>
+      <button id="buyBtn">Buy Now</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="45 Pints">
+      <div class="product-title">45 Pints</div>
+      <div class="product-desc">Era sure id have about 45 more innyeh</div>
+      <span class="product-price">15.99</span>
+      <button id="buyBtn">Buy Now</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/YkVLUxy.jpeg" alt="The shirt Off Any Mans Back">
+      <div class="product-title">The shirt Off Any Mans Back</div>
+      <div class="product-desc">No bother to me</div>
+      <span class="product-price">Him Saying Otherwise</span>
+      <button id="buyBtn">Buy Now</button>
+    </div>
     <div id="status"></div>
   </div>
   <div class="footer">
