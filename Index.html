@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PagerDuty Incident Scenarios Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6fa;
+      color: #222;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      color: #222;
+      padding: 24px 0 16px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border-bottom: 1px solid #e5e7eb;
+    }
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+    header p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #4b5563;
+    }
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px 32px 16px;
+    }
+    .header {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 32px;
+      margin-top: 24px;
+      margin-bottom: 32px;
+    }
+    .event-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 0 0 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      position: relative;
+      transition: box-shadow 0.2s;
+      min-height: 420px;
+    }
+    .event-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+    }
+    .product-img {
+      width: 100%;
+      border-radius: 16px 16px 0 0;
+      max-height: 140px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      background: #f3f4f6;
+    }
+    .event-title {
+      font-size: 1.18rem;
+      font-weight: 600;
+      margin: 12px 0 2px 0;
+      color: #222;
+      text-align: center;
+    }
+    .event-desc {
+      font-size: 1.02rem;
+      color: #374151;
+      text-align: center;
+      margin-bottom: 2px;
+    }
+    .scenario-location {
+      display: block;
+      font-weight: bold;
+      color: #2563eb;
+      font-size: 1.08rem;
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 2px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .trigger-btn {
+      margin: 0 auto 10px auto;
+      padding: 12px 0;
+      width: 90%;
+      font-size: 1.08rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 1px 4px rgba(16,185,129,0.08);
+      display: block;
+    }
+    .trigger-btn:disabled {
+      background: #cbd5e1;
+      color: #4b5563;
+      cursor: not-allowed;
+    }
+    .trigger-btn:hover:not(:disabled), .trigger-btn:focus:not(:disabled) {
+      background: #2563eb;
+    }
+    .key-section {
+      margin: 0 auto;
+      margin-top: 8px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .key-label {
+      font-size: 0.98rem;
+      color: #374151;
+      margin-bottom: 2px;
+    }
+    .key-input-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .key-input {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: #f9fafb;
+      color: #222;
+      transition: border 0.2s;
+    }
+    .key-input:focus {
+      border: 1.5px solid #3182ce;
+      outline: none;
+    }
+    .key-btn {
+      padding: 6px 10px;
+      font-size: 0.98rem;
+      border: none;
+      border-radius: 4px;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .key-btn:hover, .key-btn:focus {
+      background: #1e293b;
+    }
+    .key-clear-btn {
+      background: #e53e3e;
+      margin-left: 2px;
+    }
+    .key-clear-btn:hover, .key-clear-btn:focus {
+      background: #b91c1c;
+    }
+    .key-status {
+      font-size: 0.93rem;
+      color: #059669;
+      margin-top: 2px;
+      margin-bottom: 0;
+      min-height: 18px;
+    }
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.22);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+      padding: 32px 28px 24px 28px;
+      max-width: 420px;
+      width: 95vw;
+      text-align: center;
+      position: relative;
+      animation: popIn 0.18s;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: #2d3748;
+    }
+    .modal p {
+      font-size: 1.05rem;
+      color: #374151;
+      margin-bottom: 0;
+    }
+    .modal .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .modal .close-btn:hover, .modal .close-btn:focus {
+      color: #e53e3e;
+    }
+    .modal.success h2 { color: #059669; }
+    .modal.error h2 { color: #e53e3e; }
+    @media (max-width: 900px) {
+      .main-container { max-width: 98vw; }
+      .button-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .event-card { min-width: 90vw; max-width: 98vw; }
+      .main-container { padding: 0 2vw 32px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PagerDuty Incident Scenarios Demo</h1>
+    <p>Trigger realistic PagerDuty incidents for different demo scenarios. Each scenario can use its own integration key, stored securely in your browser.</p>
+  </header>
+  <div class="main-container">
+    <div class="header">Incident Scenarios</div>
+    <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
+  </div>
+  <div id="modalBg" class="modal-bg" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div id="modal" class="modal" tabindex="-1">
+      <button class="close-btn" id="modalCloseBtn" aria-label="Close">&times;</button>
+      <h2 id="modalTitle"></h2>
+      <p id="modalMsg"></p>
+    </div>
+  </div>
+  <script>
+    const scenarios = [
+      {
+        id: 'label_printer_offline',
+        title: 'Label Printer Offline',
+        desc: 'P1',
+        location: 'Warehouse',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/niG7rEV.jpeg',
+        alt: 'Label Printer Offline',
+        payload: {
+          summary: 'Label printer is offline in the warehouse',
+          severity: 'critical',
+          source: 'Warehouse Printer',
+          custom_details: { device: 'Label Printer', location: 'Warehouse', error: 'Offline' }
+        }
+      },
+      {
+        id: 'multiple_failures',
+        title: 'Multiple Failures',
+        desc: 'P1',
+        location: 'Multiple Services at Once',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/kvbUXW7.jpeg',
+        alt: 'Multiple Failures',
+        payload: {
+          summary: 'Multiple critical failures detected across services',
+          severity: 'critical',
+          source: 'Service Monitor',
+          custom_details: { affected: 'Multiple', error: 'Simultaneous failures' }
+        }
+      },
+      {
+        id: 'checkout_404',
+        title: 'Checkout 404',
+        desc: 'P1',
+        location: 'Frontend',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/dbxvlt5.jpeg',
+        alt: 'Checkout 404',
+        payload: {
+          summary: 'Checkout page returns 404 error',
+          severity: 'critical',
+          source: 'Frontend',
+          custom_details: { page: 'Checkout', error: '404 Not Found' }
+        }
+      },
+      {
+        id: 'fraudulent_card_activity',
+        title: 'Fraudulent Card Activity Suspected',
+        desc: 'P1',
+        location: 'Finance',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/j9Valif.jpeg',
+        alt: 'Fraudulent Card Activity Suspected',
+        payload: {
+          summary: 'Fraudulent card activity detected',
+          severity: 'critical',
+          source: 'Finance',
+          custom_details: { activity: 'Fraudulent', system: 'Card Processing' }
+        }
+      },
+      {
+        id: 'load_balancer_error',
+        title: 'Load Balancer Error',
+        desc: 'P1',
+        location: 'Backend',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/x23q15w.jpeg',
+        alt: 'Load Balancer Error',
+        payload: {
+          summary: 'Load balancer error detected',
+          severity: 'critical',
+          source: 'Backend',
+          custom_details: { component: 'Load Balancer', error: 'S18' }
+        }
+      },
+      {
+        id: 'change_event',
+        title: 'Change Event',
+        desc: 'P1',
+        location: 'Git',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/ScRUSB8.png',
+        alt: 'Change Event',
+        payload: {
+          summary: 'Change event detected in Git',
+          severity: 'critical',
+          source: 'Git',
+          custom_details: { event: 'Change', system: 'GitHub' }
+        }
+      }
+    ];
+
+    function getKeyStorageName(scenarioId) {
+      return `pd_demo_integration_key_${scenarioId}`;
+    }
+    function saveIntegrationKey(scenarioId, key) {
+      localStorage.setItem(getKeyStorageName(scenarioId), key);
+    }
+    function getIntegrationKey(scenarioId) {
+      return localStorage.getItem(getKeyStorageName(scenarioId)) || '';
+    }
+    function clearIntegrationKey(scenarioId) {
+      localStorage.removeItem(getKeyStorageName(scenarioId));
+    }
+
+    function showModal(type, title, msg) {
+      const modalBg = document.getElementById('modalBg');
+      const modal = document.getElementById('modal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMsg = document.getElementById('modalMsg');
+      modal.className = 'modal ' + (type === 'success' ? 'success' : 'error');
+      modalTitle.textContent = title;
+      modalMsg.textContent = msg;
+      modalBg.style.display = 'flex';
+      document.getElementById('modalCloseBtn').focus();
+    }
+    function closeModal() {
+      document.getElementById('modalBg').style.display = 'none';
+    }
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('modalBg').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function renderScenarioGrid() {
+      const grid = document.getElementById('scenarioGrid');
+      grid.innerHTML = '';
+      scenarios.forEach(scenario => {
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.setAttribute('data-scenario', scenario.id);
+
+        const img = document.createElement('img');
+        img.className = 'product-img';
+        img.src = scenario.img;
+        img.alt = scenario.alt;
+        card.appendChild(img);
+
+        const title = document.createElement('div');
+        title.className = 'event-title';
+        title.textContent = scenario.title;
+        card.appendChild(title);
+
+        const desc = document.createElement('div');
+        desc.className = 'event-desc';
+        desc.textContent = scenario.desc;
+        card.appendChild(desc);
+
+        const location = document.createElement('span');
+        location.className = scenario.locationClass;
+        location.textContent = scenario.location;
+        card.appendChild(location);
+
+        const triggerBtn = document.createElement('button');
+        triggerBtn.className = 'trigger-btn';
+        triggerBtn.type = 'button';
+        triggerBtn.textContent = 'Launch Incident';
+        triggerBtn.setAttribute('aria-label', `Trigger ${scenario.title}`);
+        triggerBtn.style.marginBottom = '10px';
+        card.appendChild(triggerBtn);
+
+        const keySection = document.createElement('div');
+        keySection.className = 'key-section';
+
+        const keyLabel = document.createElement('label');
+        keyLabel.className = 'key-label';
+        keyLabel.setAttribute('for', `key-input-${scenario.id}`);
+        keyLabel.textContent = 'Integration Key:';
+        keySection.appendChild(keyLabel);
+
+        const keyInputRow = document.createElement('div');
+        keyInputRow.className = 'key-input-row';
+
+        const keyInput = document.createElement('input');
+        keyInput.className = 'key-input';
+        keyInput.type = 'password';
+        keyInput.id = `key-input-${scenario.id}`;
+        keyInput.setAttribute('aria-label', `Integration key for ${scenario.title}`);
+        keyInput.autocomplete = 'off';
+        keyInput.value = getIntegrationKey(scenario.id);
+        keyInput.placeholder = 'Paste integration key...';
+        keyInputRow.appendChild(keyInput);
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'key-btn';
+        saveBtn.type = 'button';
+        saveBtn.textContent = 'Save';
+        saveBtn.setAttribute('aria-label', `Save integration key for ${scenario.title}`);
+        keyInputRow.appendChild(saveBtn);
+
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'key-btn key-clear-btn';
+        clearBtn.type = 'button';
+        clearBtn.textContent = 'Clear';
+        clearBtn.setAttribute('aria-label', `Clear integration key for ${scenario.title}`);
+        keyInputRow.appendChild(clearBtn);
+
+        keySection.appendChild(keyInputRow);
+
+        const keyStatus = document.createElement('div');
+        keyStatus.className = 'key-status';
+        keyStatus.id = `key-status-${scenario.id}`;
+        keySection.appendChild(keyStatus);
+
+        card.appendChild(keySection);
+
+        function updateKeyStatus() {
+          const key = getIntegrationKey(scenario.id);
+          if (key) {
+            keyStatus.textContent = 'Key saved';
+            keyStatus.style.color = '#059669';
+            keyInput.value = key;
+          } else {
+            keyStatus.textContent = 'No key saved';
+            keyStatus.style.color = '#e53e3e';
+            keyInput.value = '';
+          }
+        }
+        updateKeyStatus();
+
+        saveBtn.addEventListener('click', function() {
+          const val = keyInput.value.trim();
+          if (val.length < 32) {
+            keyStatus.textContent = 'Key too short';
+            keyStatus.style.color = '#e53e3e';
+            return;
+          }
+          saveIntegrationKey(scenario.id, val);
+          updateKeyStatus();
+          triggerBtn.disabled = false;
+        });
+
+        clearBtn.addEventListener('click', function() {
+          clearIntegrationKey(scenario.id);
+          updateKeyStatus();
+          triggerBtn.disabled = true;
+        });
+
+        keyInput.addEventListener('input', function() {
+          triggerBtn.disabled = this.value.trim().length < 32;
+        });
+
+        triggerBtn.disabled = !getIntegrationKey(scenario.id);
+
+        triggerBtn.addEventListener('click', function() {
+          const integrationKey = getIntegrationKey(scenario.id);
+          if (!integrationKey) {
+            showModal('error', 'No Integration Key', 'Please save an integration key for this scenario before triggering.');
+            return;
+          }
+          triggerBtn.disabled = true;
+          triggerBtn.textContent = 'Sending...';
+          const payload = {
+            routing_key: integrationKey,
+            event_action: 'trigger',
+            client: 'Change Events Demo',
+            client_url: window.location.href,
+            payload: {
+              summary: scenario.payload.summary,
+              severity: scenario.payload.severity,
+              source: scenario.payload.source,
+              custom_details: scenario.payload.custom_details
+            }
+          };
+          fetch('https://events.pagerduty.com/v2/enqueue', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(async response => {
+            const data = await response.json();
+            if (response.ok && data.status === 'success') {
+              showModal('success', 'Incident Triggered', 'PagerDuty incident triggered successfully.');
+            } else {
+              let msg = 'Failed to trigger incident.';
+              if (data.errors && data.errors.length) msg += ' ' + data.errors.join(' ');
+              showModal('error', 'Error', msg);
+            }
+          })
+          .catch(err => {
+            showModal('error', 'Network Error', 'Could not reach PagerDuty Events API. ' + err);
+          })
+          .finally(() => {
+            triggerBtn.disabled = false;
+            triggerBtn.textContent = 'Launch Incident';
+          });
+        });
+
+        grid.appendChild(card);
+      });
+    }
+    renderScenarioGrid();
+  </script>
+</body>
+</html>
