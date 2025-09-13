@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Incident Scenarios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: linear-gradient(120deg, #f7f7f7 0%, #e3e8ff 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .header {
+      background: #222e50;
+      color: #fff;
+      padding: 30px 0 20px 0;
+      text-align: center;
+      font-size: 2.5em;
+      letter-spacing: 2px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #222e5022;
+    }
+    .storefront {
+      background: #fff;
+      max-width: 900px;
+      margin: 60px auto 0 auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px #222e5022;
+      padding: 32px 32px 24px 32px;
+      /* NEW: Use grid for columns */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .product {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #222e5011;
+      padding: 18px 12px 24px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .product:hover {
+      box-shadow: 0 6px 24px #222e5022;
+    }
+    .product-img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      background: #f3f6ff;
+      display: block;
+      box-shadow: none;
+    }
+    .product-title {
+      font-size: 1.25em;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #222e50;
+    }
+    .product-desc {
+      color: #555;
+      font-size: 1.05em;
+      margin-bottom: 18px;
+    }
+    .product-price {
+      font-size: 1.3em;
+      color: #0070f3;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: block;
+    }
+    #buyBtn {
+      font-size: 1.15em;
+      padding: 12px 38px;
+      background: linear-gradient(90deg, #0070f3 0%, #222e50 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 2px 8px #0070f322;
+      transition: background 0.2s;
+    }
+    #buyBtn:active {
+      background: linear-gradient(90deg, #005bb5 0%, #1a1f3c 100%);
+    }
+    #status {
+      grid-column: 1 / -1;
+      margin-top: 28px;
+      font-size: 1.08em;
+      color: #333;
+      min-height: 24px;
+      transition: color 0.2s;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 1em;
+      margin: 60px 0 20px 0;
+    }
+    @media (max-width: 900px) {
+      .storefront {
+        max-width: 98vw;
+        padding: 18px 2vw 18px 2vw;
+      }
+    }
+    @media (max-width: 600px) {
+      .storefront {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .header {
+        font-size: 2em;
+        padding: 18px 0 12px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Incident Scenarios</div>
+  <div class="storefront">
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/niG7rEV.jpeg" alt="Label Printer Offline">
+      <div class="product-title">Label Printer Offline</div>
+      <div class="product-desc">P1</div>
+      <span class="product-price">Warehouse</span>
+      <button id="buyBtn">Launch Incident</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/kvbUXW7.jpeg" alt="Multiple Failures">
+      <div class="product-title">Multiple Failures</div>
+      <div class="product-desc">P1</div>
+      <span class="product-price">Multiple Services at Once</span>
+      <button id="buyBtn">Launch Incident</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/dbxvlt5.jpeg" alt="Checkout 404">
+      <div class="product-title">Checkout 404</div>
+      <div class="product-desc">P1</div>
+      <span class="product-price">Frontend</span>
+      <button id="buyBtn">Launch Incident</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/j9Valif.jpeg" alt="Fraudulent Card Activity Suspected">
+      <div class="product-title">Fraudulent Card Activity Suspected</div>
+      <div class="product-desc">P1</div>
+      <span class="product-price">Finance</span>
+      <button id="buyBtn">Launch Incident</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/x23q15w.jpeg" alt="Load Balancer Error">
+      <div class="product-title">Load Balancer Error</div>
+      <div class="product-desc">P1</div>
+      <span class="product-price">Backend</span>
+      <button id="buyBtn">Launch Incident</button>
+    </div>
+    <div class="product">
+      <img class="product-img" src="https://i.imgur.com/ScRUSB8.png" alt="Change Event">
+      <div class="product-title">Change Event</div>
+      <div class="product-desc">P1</div>
+      <span class="product-price">Git</span>
+      <button id="buyBtn">Launch Incident</button>
+    </div>
+    <div id="status"></div>
+  </div>
+  <div class="footer">
+    &copy; Paddy Lostys Breakfast Club &mdash; 
+  </div>
+  <script>
+//FILL NEW SCRIPT HERE
+  </script>
+</body>
+</html>
