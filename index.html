@@ -333,7 +333,6 @@
     <div class="header">📋 Incident Scenarios</div>
     <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
 
-    <div class="header" style="margin-top: 48px;">🔄 Change Event Scenarios</div>
     <div class="button-grid" id="changeEventGrid" aria-label="Change Event Scenarios"></div>
 
     <div class="header" style="margin-top: 48px;">🎯 Demo Workflows</div>
@@ -957,10 +956,17 @@
       expandedSection.id = 'expandedChangeEvents';
       expandedSection.className = 'expanded-section';
 
+      // Add header inside the expanded section
+      const expandedHeader = document.createElement('div');
+      expandedHeader.className = 'header';
+      expandedHeader.style.marginTop = '48px';
+      expandedHeader.textContent = '🔄 Change Event Scenarios';
+
       const expandedGrid = document.createElement('div');
       expandedGrid.className = 'expanded-grid';
       expandedGrid.id = 'expandedChangeEventsGrid';
 
+      expandedSection.appendChild(expandedHeader);
       expandedSection.appendChild(expandedGrid);
       grid.appendChild(expandedSection);
     }
