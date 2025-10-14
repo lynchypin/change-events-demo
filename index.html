@@ -8,573 +8,319 @@
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Inter', 'Inter', 'Se- ppUe-systemI'BlinkMacSy,temFont, s -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, la67ee- 0%, #764ba2 100%)gradient(135deg, #667eea 0%, #764ba2 100%);
-      babkgraund-attachment: fixed;
-      cockground-attachment: fixed;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6fa;
       color: #222;
       min-height: 100vh;
     }
-    header {linear-gradient(135deg, 1e3a8a 0%, #3b826 100%)
-      backgroufff linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-      color: #ff0;32
-      padding: 40px 0 32px 0;
-      text-align: ce4ter2015
-      box-shadow: 0 43x 20px rgrgba(255,255,25(,0.2)0,0.15);
-      border-bottom: 3px solid rgba(255,255,255,0.2);
+    header {
+      background: #fff;
+      color: #222;
+      padding: 24px 0 16px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border-bottom: 1px solid #e5e7eb;
     }
-    header h1 {12
-      margin: 0 0 15px 0;
-      font-size: 2.5re-0.5;
-      letter-spat: 800;
-      texc-shadowi 0 2px 10pxnrgba(0,0,:, .2)-0.5px;
-      font-weight: 800;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      font-weight: 700;
     }
-    header p {5
-      margin:rg;a(255,255,25,0.9);
-      font-weight: 400
-      font-size: 1.15rem;
-      color: rgba(255,255,255,0.95);
-      font-weight: 400;
+    header p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #4b5563;
     }
-    .main-container {48
+    .main-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 16px 48px 16px;
-    }7
-    .header {7
-      text-align: 48nter;
-      font-size: 1.75e4m;
-      font-weight: 700-;px;
-      color: #fff;
-      text-shadow: 0 2px 8 rgba(0,0,0,0.2)
-      margin-top: 48px;
-      margin-bottom: 24px;
-      letter-spacing: -0.5px;
-      color: #fff;
-      text-h8adow: 0 2px 8px rgba(0,0,0,0.2);
+      padding: 0 16px 32px 16px;
+    }
+    .header {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
     }
     .button-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 28px;
-      margin-top: 24p20
-      margin-bottom:832p3012
-    }4
+      gap: 32px;
+      margin-top: 24px;
+      margin-bottom: 32px;
+    }
     .event-card {
       background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      padding: 0  all00.3s cu icpbezier(0.4,, 0, 1)
-      display: flex;;
-      overflow: hidden;
-    }
-    .event-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%)
-      opacity: 0;
-      transition: opacity 0.3s;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 0 0 20px 0;
+      display: flex;
       flex-direction: column;
       align-items: stretch;
-      transform: translateY(-8px);
-      position: rela16ive52);
-    }
-    .event-card:hover::before {
-      opacity: 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      transition: box-shadow 0.2s;
       min-height: 340px;
-      overflow: hidden;
     }
-    .event-card:: linear-gradient(135deg,bef8oarc 0%, #e2e8f0 100%)e {
-      content: '';
-      position: absolute;
-      top: 0;2020
-      left: 0;2
-      right: 0;
-      height: 4p2;
-      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-      opacity: 0;
-      transition: o25city 0.3s;
-    }7
-    .event-card6hover 4
-      transfor1em93btranslateY(-8px);
-      box-shadow: 0 16px 50px rgba(0,0,0,0.2);
-      letter-spacing: -0.3px;
-    }
-    .event-card:hover::before {
-      opacity: 1;
+    .event-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.13);
     }
     .product-img {
-      width: 100%;6
-      heigh10: 140px;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      width: 100%;
+      height: 140px;
+      background: #fff;
       object-fit: contain;
       display: block;
-      border-ri7s569 20px 20px 0 0;
-      margin-bottom6 12px;
+      border-radius: 16px 16px 0 0;
+      margin-bottom: 10px;
       box-sizing: border-box;
-      padding: 12px;
-    }84
+      padding: 10px;
+    }
     .event-title {
-      font-size: 1.25rem;e2e8f0
-      font-weight: 708;
-      margin: 16px 0 14px 0;
-      color: #1e291b;
+      font-size: 1.18rem;
+      font-weight: 600;
+      margin: 12px 0 12px 0;
+      color: #222;
       text-align: center;
-      letter-spacin7: -0.3px;
-    }al
+    }
     .priority-container {
       display: flex;
-      align-items: cen4erb8;
-      background: #f8f;c
+      align-items: center;
       justify-content: center;
-      margin: 0 0 16px 0;
-      gap: 10px;
-    }3b8f
-    .priority-label {459130465
-      font-size: 0.95rem;
-      color: #475569;
-      font-weight: 6002
-    }4
-    .priority-select {
-      padding: 8px 1px;
-      font-size: 0.75rem;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #fff; 0%, #334155 100%)
-      color: #1e293b;
-      cursor: pointer;
-      font-weight:7ll 0.3s 0ubic-bezie(0.4, 0,, 1)
-      transition: al4 0.12s;30, 4  3
+      margin: 0 0 12px 0;
+      gap: 8px;
     }
-      letter-spacing: 0.3px;
+    .priority-label {
+      font-size: 0.95rem;
+      color: #374151;
+      font-weight: 500;
+    }
+    .priority-select {
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      border: 2px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #374151;
+      cursor: pointer;
+      font-weight: 600;
+      transition: border-color 0.2s;
+    }
     .priority-select:hover {
-      border-color: #94a3b8;
-      background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
-    }6478
-    .priority-select:focd;
-      box-shauow: nones {
+      border-color: #9ca3af;
+    }
+    .priority-select:focus {
       outline: none;
-      border-color: #3b82f6;
-      box-shadow: linear-gradient(135deg, 03b8 f6 0%, #20 0 4 100%)px rgba(59, 130, 246, 0.15);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
     .trigger-btn {
-      margin: 0 auto 12px auto;
-      padding: 14p12 0;
+      margin: 0 auto 10px auto;
+      padding: 12px 0;
       width: 90%;
-      font-size: 1.1rem;
-      font-weight: 700;
-      borde8: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-      color: #fff;
-      cursor: i7t569r;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.08rem;
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
-      display: block;
-      letter-spacing: 0.3px;
-    }8
-    .trigger-btn:disabled {
-      background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
-      color: #64748b;
-      cursor: not-allowed;
-      box-shado8: n12ne;
-    }
-    .trigger-b2n:hover:noi2e8f0abled), .trigger-btn:focus:not(:disabled) {
-      background: lin8ar-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-      transform: tra8slaceY(-2px);
-      box-shad1eo93b 0 8px 20px rgba(59, 130, 246, 0.4);
-    }all
-      font-weight: 500;
-    .key-section {
-      margin: 0 auto;
-      margin-t2 12px;bf6
-      width: 90%;;
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1)
-      display: flex;
-      flex-direction: column;
-      gap: 8px;84
-    }5
-    .key-label {
-      font-size: 0.988em;
-      color: #475 linear-gradient(135deg, #3b82f6 0%,569; 100%)
-      margin-bottom: 2px;
-      font-weight: 600;
-    }ll 0.2s;
-      font-weiht: 600;
-      bx-shaow: 0 2px 8px rgba(59, 130, 246,3)
-    .key-input-row {
-      display: flex;
-      gap: 8px;linear-gradient(135deg, 2563eb 0%, #40af 100%);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 1px rgba(5, 10, 246, 0.4)
-      align-items: center;
-    }
-    .key-input {linear-gradint(13dg, #f4444 0%, #dc2626 100%)
-      flex: 1;: 2px;
-      box-shadow 0px 8 rgba(239, 68, 68, 0.3)
-      padding: 8px 12px;
-      font-size: 1rem;
-      border: 2px linear-gradient(135deg, sdc2626 0%, #olid # 100%)e2e8f0;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-      border-radius: 8px;
-      background: #f8fafc;
-      color: #1e293b;
-      transition: all 0.2s;
-      font-weight:4500;
-    }
-    .key-input:focus {
-      font-weight: 600;
-      border: 2px solid #3b82f6;
-      outline: none;
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-    }5);
-      backdrop-filter: blur(4px
-    .key-btn {
-      padding: 8px 14px;
-      font-size: 0.95rem;
       border: none;
       border-radius: 8px;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: #1e293b;
       color: #fff;
       cursor: pointer;
-      transition: all 0.2s;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+      transition: background 0.2s;
+      box-shadow: 0 1px 4px rgba(16,185,129,0.08);
+      display: block;
     }
-    .key-btn:hover, .2ey-btn:focus {
-      background: li20ear60radient(135deg, 3563eb 0%, #1e40af 100%);
-      transform40tra3nlat3e(-13p);
-      box-shadow: 6 4px 12px rgba(59, 130, 246, 0.4);
+    .trigger-btn:disabled {
+      background: #cbd5e1;
+      color: #4b5563;
+      cursor: not-allowed;
+    }
+    .trigger-btn:hover:not(:disabled), .trigger-btn:focus:not(:disabled) {
+      background: #2563eb;
+    }
+    .key-section {
+      margin: 0 auto;
+      margin-top: 8px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .key-label {
+      font-size: 0.98rem;
+      color: #374151;
+      margin-bottom: 2px;
+    }
+    .key-input-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .key-input {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: #f9fafb;
+      color: #222;
+      transition: border 0.2s;
+    }
+    .key-input:focus {
+      border: 1.5px solid #3182ce;
+      outline: none;
+    }
+    .key-btn {
+      padding: 6px 10px;
+      font-size: 0.98rem;
+      border: none;
+      border-radius: 4px;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .key-btn:hover, .key-btn:focus {
+      background: #1e293b;
     }
     .key-clear-btn {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      margin-left: 2px 0.3s cubic-bezier(0.4,;, 02, )
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+      background: #e53e3e;
+      margin-left: 2px;
     }
-    .key-clear-btn:hover, .key-cla translateY(20px)r-btn:focus {
-      background: linear-gradi translateY(0)ent(135deg, #dc2626 0%, #b91c1c 100%);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    .key-clear-btn:hover, .key-clear-btn:focus {
+      background: #b91c1c;
     }
     .key-status {
-      font-size: 0.53rem;
-      color: #1e099b;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      margin-top: 4px;
+      font-size: 0.93rem;
+      color: #059669;
+      margin-top: 2px;
       margin-bottom: 0;
-      min-height: 11x;
-      font-weit7 56900;
+      min-height: 18px;
     }
-      line-height: 1.6;
     .modal-bg {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      backgr6und: rgba(0,0,0,0.5);
-      backdrop6filter: blur(4px);
-      z-index: 100#f1f5f9
+      background: rgba(0,0,0,0.22);
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
       animation: fadeIn 0.2s;
-    }al 0.2s;
-      width: 36px;
-      height: 36px;
-      brder-adius:5%;
-      display: flex;
-      align-items: center;
-      jutify-content: center
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
-      background: #fee2e2;
-      to { opacf4444;
-      transform: rotaty(90d g)1; }
+      to { opacity: 1; }
     }
     .modal {
-      background: #fff;f4444
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      padding: 40px 32px 32px 32px;
-      max-width: 465px;6b6d4;
-    }
-    .change-event-card::before {
-      background: linear-gradient(90deg, #06b6d4 0%, #0 100%)
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+      padding: 32px 28px 24px 28px;
+      max-width: 420px;
       width: 95vw;
       text-align: center;
-      position: r linear-gradient(135deg, #06b6d4 0%,elative; 100%)
-      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
-      animation: popIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      animation: popIn 0.18s;
     }
-    @keyframes po linear-gradient(135deg, #0891b2 0%,pIn {0 100%);
-      box-shadow:  8px 20px rgba(6, 182, 212, 0.4)
-      from { transform: scale(0.9) translateY(20px); opacity: 0; }
-      to { transform: scale(1) translateY(0); opacity: 1; }
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
     .modal h2 {
-      margin-top: 058b5f6
-      font-size: 1.5rem;
-      color: #1e293b;
-      font-weight:::before {
-      background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
-    }
-    .workflow-card 700;
-      letter-spac linear-gradient(135deg,in8b5cf6 0%, #g: -0. 100%)3px;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: #2d3748;
     }
     .modal p {
-      font-size: 1linear-gradient(135deg, .7c3aed 0%, #1rem; 100%)
-      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
-      color: #475569;
+      font-size: 1.05rem;
+      color: #374151;
       margin-bottom: 0;
-      line-height:linear-gradient(135deg,  186;c 0%, #f1f5f9 100%)
-    }12
-    .modal .clos6-btn {
-      position:6absolute;
-      top: 16px;
-      right: 167x;9
-      background: #f1f5f9;
-      border: 2px solid #e2e8f0;
+    }
+    .modal .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
       border: none;
       font-size: 1.5rem;
       color: #64748b;
-      cursor: pointer4
-      transition: all 0.2s;
-      width: 36px;
-      height: 66px;;
-      line-height: 1.5
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      cursor: pointer;
+      transition: color 0.2s;
     }
     .modal .close-btn:hover, .modal .close-btn:focus {
-      background: #fee2e2;5cubic-bzir(0.4, 0, 0.2, 1)4
-      color: #ef4444;
-      transform: rotate(90deg);
+      color: #e53e3e;
     }
     .modal.success h2 { color: #059669; }
-    .modal.error h25{ color: #ef4444; }
+    .modal.error h2 { color: #e53e3e; }
 
-    /* Change Event Card Stylin6 *cubic-bzer(0.4, 0, 0.2, 1)5
+    /* Change Event Card Styling */
     .change-event-card {
-      border-left: 5px solid #06b6d4;
+      border-left: 4px solid #0891b2;
     }
-    .change-event-card::before {
-      backgo8und: linear-gradient(90deg, #06b6d4 0%, #0891b2 100%);
-    }4
     .change-event-card .trigger-btn {
-      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+      background: #0891b2;
     }
     .change-event-card .trigger-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
-      box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
+      background: #0e7490;
     }
 
-    /* Workflow Card Styling */48; }
-      header h1 { font-size: 2rem; }
-      header p { font-size: 1rem; }
-      .header { font-size: 1.5rem
+    /* Workflow Card Styling */
     .workflow-card {
-      border-left: 5px solid #8b5cf6;
+      border-left: 4px solid #7c3aed;
       grid-column: span 2;
     }
-    .workflow-card::before {
-      background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
-    }
     .workflow-card .trigger-btn {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      background: #7c3aed;
     }
     .workflow-card .trigger-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+      background: #6d28d9;
     }
     .workflow-steps {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      border-radius: 12px;
-      padding: 16px;
-      margin: 16px 20px;
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 20px;
       font-size: 0.95rem;
-      color: #475569;
+      color: #4b5563;
       text-align: left;
-      border: 2px solid #e2e8f0;
     }
     .workflow-steps ol {
       margin: 8px 0;
-      padding-left: 24px;
+      padding-left: 20px;
     }
     .workflow-steps li {
-      margin: 6px 0;
-      line-height: 1.5;
+      margin: 4px 0;
     }
 
     /* Expandable Section Styling */
     .expanded-section {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out;
+      transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
       opacity: 0;
       grid-column: 1 / -1;
     }
     .expanded-section.open {
-      max-height: 2500px;
+      max-height: 2000px;
       opacity: 1;
-      transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in;
+      transition: max-height 0.5s ease-in, opacity 0.4s ease-in;
     }
     .expanded-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 28px;
-      padding: 24px 0;
-    }
-    /* Statistics Dashboard - Clean Minimal Design */
-    .stats-dashboard {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 32px;
-      margin: 32px auto 24px auto;
-      max-width: 1200px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-    }
-    .stats-header {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      color: #1e293b;
-      letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .stat-card {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid #e2e8f0;
-      transition: all 0.2s ease;
-    }
-    .stat-card:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .stat-icon {
-      font-size: 1.75rem;
-      margin-bottom: 8px;
-      opacity: 0.9;
-    }
-    .stat-value {
-      font-size: 2.25rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin: 4px 0 8px 0;
-      letter-spacing: -0.5px;
-    }
-    .stat-label {
-      font-size: 0.875rem;
-      color: #64748b;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .stat-change {
-      font-size: 0.8rem;
-      margin-top: 4px;
-      font-weight: 500;
-    }
-    .stat-change.positive {
-      color: #10b981;
-    }
-    .stat-change.neutral {
-      color: #64748b;
+      gap: 32px;
+      padding: 20px 0;
     }
 
-    /* Progress Section */
-    .progress-section {
-      margin-top: 32px;
-      padding-top: 32px;
-      border-top: 1px solid #e2e8f0;
-    }
-    .progress-section-title {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 20px;
-      letter-spacing: -0.2px;
-    }
-    .progress-item {
-      margin-bottom: 24px;
-    }
-    .progress-item:last-child {
-      margin-bottom: 0;
-    }
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .progress-label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: #475569;
-    }
-    .progress-value {
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
-    .progress-bar-container {
-      width: 100%;
-      height: 6px;
-      background: #e2e8f0;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      background: #3b82f6;
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-    .progress-bar.incidents {
-      background: #ef4444;
-    }
-    .progress-bar.changes {
-      background: #06b6d4;
-    }
-    .progress-bar.workflows {
-      background: #8b5cf6;
-    }
+    @media (max-width: 900px) {
+      .main-container { max-width: 98vw; }
+      .button-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
       .workflow-card { grid-column: span 1; }
-      .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
     }
     @media (max-width: 600px) {
       .event-card { min-width: 90vw; max-width: 98vw; }
-      .main-container { padding: 0 2vw 48px 2vw; }
-      header h1 { font-size: 2rem; }
-      header p { font-size: 1rem; }
-      .header { font-size: 1.5rem; }
-      .stats-dashboard { padding: 20px; margin: 20px 2vw; }
-      .stats-grid { grid-template-columns: 1fr; gap: 16px; }
-      .stat-value { font-size: 2rem; }
+      .main-container { padding: 0 2vw 32px 2vw; }
     }
   </style>
 </head>
@@ -583,84 +329,12 @@
     <h1>PagerDuty Demo - Incidents & Change Events</h1>
     <p>Trigger realistic incidents and send change events to demonstrate PagerDuty workflows.</p>
   </header>
-
-  <!-- Statistics Dashboard -->
   <div class="main-container">
-    <div class="stats-dashboard">
-      <div class="stats-header">📊 Demo Statistics</div>
+    <div class="header">📋 Incident Scenarios</div>
+    <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
 
-      <div class="stats-header">
-        <span>📊</span>
-        <span>Demo Statistics</span>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">🚨</div>
-          <div class="stat-value" id="totalIncidents">0</div>
-          <div class="stat-label">Total Incidents</div>
-          <div class="stat-change positive" id="incidentsChange">+0 this session</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">🔄</div>
-          <div class="stat-value" id="totalChangeEvents">0</div>
-          <div class="stat-label">Change Events</div>
-          <div class="stat-change positive" id="changesChange">+0 this session</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">⚡</div>
-          <div class="stat-value" id="totalWorkflows">0</div>
-          <div class="stat-label">Workflows Run</div>
-          <div class="stat-change positive" id="workflowsChange">+0 this session</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">📈</div>
-          <div class="stat-value" id="multipleFailuresQueue">0</div>
-          <div class="stat-label">Multi-Incident Queue</div>
-          <div class="stat-change neutral" id="queueChange">Ready to send</div>
-        </div>
-      </div>
-
-      <div class="progress-section">
-        <div class="progress-section-title">Activity Breakdown</div>
-
-        <div class="progress-item">
-          <div class="progress-header">
-            <span class="progress-label">Most Used Incident</span>
-            <span class="progress-value" id="topIncidentName">None yet</span>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-bar incidents" id="topIncidentBar" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="progress-item">
-          <div class="progress-header">
-            <span class="progress-label">Most Used Change Event</span>
-            <span class="progress-value" id="topChangeName">None yet</span>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-bar changes" id="topChangeBar" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="progress-item">
-          <div class="progress-header">
-            <span class="progress-label">Session Activity</span>
-            <span class="progress-value" id="sessionActivity">0 actions</span>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-bar" id="sessionBar" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="main-container">
+    <div class="header" style="margin-top: 48px;">🔄 Change Event Scenarios</div>
+    <div class="button-grid" id="changeEventGrid" aria-label="Change Event Scenarios"></div>
 
     <div class="header" style="margin-top: 48px;">🎯 Demo Workflows</div>
     <p style="text-align: center; color: #6b7280; margin-top: 8px; margin-bottom: 16px;">Automated sequences to demonstrate change correlation with incidents</p>
@@ -674,129 +348,6 @@
     </div>
   </div>
   <script>
-    // Statistics tracking
-    const stats = {
-      totalIncidents: 0,
-      totalChangeEvents: 0,
-      totalWorkflows: 0,
-      multipleFailuresQueue: 0,
-      incidentCounts: {},
-      changeEventCounts: {},
-      sessionStart: Date.now()
-    };
-
-    // Load stats from localStorage
-    function loadStats() {
-      const saved = localStorage.getItem('pdDemoStats');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        Object.assign(stats, parsed);
-        stats.sessionStart = Date.now(); // Reset session start
-      }
-      updateStatsDisplay();
-    }
-
-    // Save stats to localStorage
-    function saveStats() {
-      localStorage.setItem('pdDemoStats', JSON.stringify(stats));
-    }
-
-    // Update statistics display
-    function updateStatsDisplay() {
-      document.getElementById('totalIncidents').textContent = stats.totalIncidents;
-      document.getElementById('totalChangeEvents').textContent = stats.totalChangeEvents;
-      document.getElementById('totalWorkflows').textContent = stats.totalWorkflows;
-      document.getElementById('multipleFailuresQueue').textContent = stats.multipleFailuresQueue;
-
-      document.getElementById('incidentsChange').textContent = `+${stats.totalIncidents} this session`;
-      document.getElementById('changesChange').textContent = `+${stats.totalChangeEvents} this session`;
-      document.getElementById('workflowsChange').textContent = `+${stats.totalWorkflows} this session`;
-
-      if (stats.multipleFailuresQueue > 0) {
-        document.getElementById('queueChange').textContent = `${stats.multipleFailuresQueue} pending`;
-        document.getElementById('queueChange').className = 'stat-change positive';
-      } else {
-        document.getElementById('queueChange').textContent = 'Ready to send';
-        document.getElementById('queueChange').className = 'stat-change neutral';
-      }
-
-      // Update progress bars
-      updateProgressBars();
-    }
-
-    // Update progress bars
-    function updateProgressBars() {
-      // Find most used incident
-      let topIncident = null;
-      let maxIncidentCount = 0;
-      for (const [id, count] of Object.entries(stats.incidentCounts)) {
-        if (count > maxIncidentCount) {
-          maxIncidentCount = count;
-          topIncident = id;
-        }
-      }
-
-      if (topIncident) {
-        const scenario = scenarios.find(s => s.id === topIncident);
-        document.getElementById('topIncidentName').textContent = scenario ? `${scenario.title} (${maxIncidentCount})` : `${maxIncidentCount} uses`;
-        const percentage = Math.min((maxIncidentCount / Math.max(stats.totalIncidents, 1)) * 100, 100);
-        document.getElementById('topIncidentBar').style.width = `${percentage}%`;
-      }
-
-      // Find most used change event
-      let topChange = null;
-      let maxChangeCount = 0;
-      for (const [id, count] of Object.entries(stats.changeEventCounts)) {
-        if (count > maxChangeCount) {
-          maxChangeCount = count;
-          topChange = id;
-        }
-      }
-
-      if (topChange) {
-        const changeEvent = changeEvents.find(c => c.id === topChange);
-        document.getElementById('topChangeName').textContent = changeEvent ? `${changeEvent.title} (${maxChangeCount})` : `${maxChangeCount} uses`;
-        const percentage = Math.min((maxChangeCount / Math.max(stats.totalChangeEvents, 1)) * 100, 100);
-        document.getElementById('topChangeBar').style.width = `${percentage}%`;
-      }
-
-      // Session activity
-      const totalActions = stats.totalIncidents + stats.totalChangeEvents + stats.totalWorkflows;
-      document.getElementById('sessionActivity').textContent = `${totalActions} actions`;
-      const sessionPercentage = Math.min((totalActions / 50) * 100, 100); // Cap at 50 actions for 100%
-      document.getElementById('sessionBar').style.width = `${sessionPercentage}%`;
-    }
-
-    // Track incident trigger
-    function trackIncident(scenarioId) {
-      stats.totalIncidents++;
-      stats.incidentCounts[scenarioId] = (stats.incidentCounts[scenarioId] || 0) + 1;
-      saveStats();
-      updateStatsDisplay();
-    }
-
-    // Track change event
-    function trackChangeEvent(eventId) {
-      stats.totalChangeEvents++;
-      stats.changeEventCounts[eventId] = (stats.changeEventCounts[eventId] || 0) + 1;
-      saveStats();
-      updateStatsDisplay();
-    }
-
-    // Track workflow
-    function trackWorkflow() {
-      stats.totalWorkflows++;
-      saveStats();
-      updateStatsDisplay();
-    }
-
-    // Update multiple failures queue
-    function updateMultipleFailuresQueue(count) {
-      stats.multipleFailuresQueue = count;
-      saveStats();
-      updateStatsDisplay();
-    }
-
     const scenarios = [
       {
         id: 'label_printer_offline',
@@ -811,36 +362,6 @@
           severity: 'critical',
           source: 'Warehouse Printer',
           custom_details: { device: 'Label Printer', location: 'Warehouse', error: 'Offline' }
-        }
-      },
-      {
-        id: 'fraudulent_card_activity',
-        title: 'Fraudulent Card Activity Suspected',
-        desc: 'P1',
-        location: 'Finance',
-        locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/j9Valif.jpeg',
-        alt: 'Fraudulent Card Activity Suspected',
-        payload: {
-          summary: 'Fraudulent card activity detected',
-          severity: 'critical',
-          source: 'Finance',
-          custom_details: { activity: 'Fraudulent', system: 'Card Processing' }
-        }
-      },
-      {
-        id: 'checkout_404',
-        title: 'Checkout 404',
-        desc: 'P1',
-        location: 'Frontend',
-        locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/dbxvlt5.jpeg',
-        alt: 'Checkout 404',
-        payload: {
-          summary: 'Checkout page returns 404 error',
-          severity: 'critical',
-          source: 'Frontend',
-          custom_details: { page: 'Checkout', error: '404 Not Found' }
         }
       },
       {
@@ -859,19 +380,33 @@
         }
       },
       {
-        id: 'change_event',
-        title: 'Change Event',
+        id: 'checkout_404',
+        title: 'Checkout 404',
         desc: 'P1',
-        location: 'Git',
+        location: 'Frontend',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/ScRUSB8.png',
-        alt: 'Change Event',
-        isExpandable: true,
+        img: 'https://i.imgur.com/dbxvlt5.jpeg',
+        alt: 'Checkout 404',
         payload: {
-          summary: 'Change event detected in Git',
+          summary: 'Checkout page returns 404 error',
           severity: 'critical',
-          source: 'Git',
-          custom_details: { event: 'Change', system: 'GitHub' }
+          source: 'Frontend',
+          custom_details: { page: 'Checkout', error: '404 Not Found' }
+        }
+      },
+      {
+        id: 'fraudulent_card_activity',
+        title: 'Fraudulent Card Activity Suspected',
+        desc: 'P1',
+        location: 'Finance',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/j9Valif.jpeg',
+        alt: 'Fraudulent Card Activity Suspected',
+        payload: {
+          summary: 'Fraudulent card activity detected',
+          severity: 'critical',
+          source: 'Finance',
+          custom_details: { activity: 'Fraudulent', system: 'Card Processing' }
         }
       },
       {
@@ -889,6 +424,22 @@
           custom_details: { component: 'Load Balancer', error: 'S18' }
         }
       },
+      {
+        id: 'change_event',
+        title: 'Change Event',
+        desc: 'P1',
+        location: 'Git',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/ScRUSB8.png',
+        alt: 'Change Event',
+        isExpandable: true,
+        payload: {
+          summary: 'Change event detected in Git',
+          severity: 'critical',
+          source: 'Git',
+          custom_details: { event: 'Change', system: 'GitHub' }
+        }
+      },
       // Removed old generic "Change Event" card - replaced with specific change event scenarios below
     ];
 
@@ -900,7 +451,7 @@
         desc: 'Deploy v2.4.0',
         location: 'CI/CD Pipeline',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/sqetFrT.png',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Production+Deploy',
         alt: 'Production Deployment',
         isChangeEvent: true,
         payload: {
@@ -925,7 +476,7 @@
         desc: 'UI Updates',
         location: 'Frontend',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/178QhBZ.png',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Frontend+Deploy',
         alt: 'Frontend Deployment',
         isChangeEvent: true,
         payload: {
@@ -949,7 +500,7 @@
         desc: 'Schema Changes',
         location: 'Database',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/NBmpq9D.jpeg',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Database+Migration',
         alt: 'Database Migration',
         isChangeEvent: true,
         payload: {
@@ -973,7 +524,7 @@
         desc: 'Load Balancer Rules',
         location: 'Infrastructure',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/aEIlroS.jpeg',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Config+Update',
         alt: 'Config Update',
         isChangeEvent: true,
         payload: {
@@ -1307,10 +858,6 @@
               });
 
               Promise.all(promises).then(() => {
-                // Track incidents for this wave
-                otherScenariosWithKeys.forEach(s => trackIncident(s.id));
-                updateMultipleFailuresQueue(totalWaves - waveCount);
-
                 if (waveCount < totalWaves) {
                   // Schedule next wave with countdown
                   let countdown = 10;
@@ -1328,14 +875,12 @@
                   }, 10000);
                 } else {
                   // All waves complete
-                  updateMultipleFailuresQueue(0);
                   triggerBtn.dataset.running = 'false';
                   triggerBtn.disabled = false;
                   triggerBtn.textContent = 'Launch Incident';
                   showModal('success', 'Events Sent Successfully', `All ${totalWaves} waves of incidents have been triggered for: ${scenarioNames}`);
                 }
               }).catch(err => {
-                updateMultipleFailuresQueue(0);
                 triggerBtn.dataset.running = 'false';
                 triggerBtn.disabled = false;
                 triggerBtn.textContent = 'Launch Incident';
@@ -1388,7 +933,6 @@
           .then(async response => {
             const data = await response.json();
             if (response.ok && data.status === 'success') {
-              trackIncident(scenario.id); // Track successful incident
               showModal('success', 'Incident Triggered', 'PagerDuty incident triggered successfully.');
             } else {
               let msg = 'Failed to trigger incident.';
@@ -1413,17 +957,10 @@
       expandedSection.id = 'expandedChangeEvents';
       expandedSection.className = 'expanded-section';
 
-      // Add header inside the expanded section
-      const expandedHeader = document.createElement('div');
-      expandedHeader.className = 'header';
-      expandedHeader.style.marginTop = '48px';
-      expandedHeader.textContent = '🔄 Change Event Scenarios';
-
       const expandedGrid = document.createElement('div');
       expandedGrid.className = 'expanded-grid';
       expandedGrid.id = 'expandedChangeEventsGrid';
 
-      expandedSection.appendChild(expandedHeader);
       expandedSection.appendChild(expandedGrid);
       grid.appendChild(expandedSection);
     }
@@ -1569,7 +1106,6 @@
           .then(async response => {
             const data = await response.json();
             if (response.ok && data.status === 'success') {
-              trackChangeEvent(scenario.id); // Track successful change event
               showModal('success', 'Change Event Sent', 'PagerDuty change event sent successfully.');
             } else {
               let msg = 'Failed to send change event.';
@@ -1696,7 +1232,6 @@
               triggerBtn.disabled = false;
               triggerBtn.textContent = 'Run Workflow';
               statusDiv.textContent = 'Ready to run';
-              trackWorkflow(); // Track workflow completion
               statusDiv.style.color = '#059669';
               showModal('success', 'Workflow Complete', 'All steps have been executed successfully. Check PagerDuty to see the correlation!');
               return;
@@ -1754,13 +1289,6 @@
                 throw new Error(data.errors ? data.errors.join(' ') : 'Failed to execute step');
               }
 
-              // Track the action
-              if (step.action === 'send_change_event') {
-                trackChangeEvent(scenario.id);
-              } else if (step.action === 'trigger_incident') {
-                trackIncident(scenario.id);
-              }
-
               // Wait for delay if specified
               if (step.delay_after > 0) {
                 let countdown = step.delay_after / 1000;
@@ -1794,9 +1322,6 @@
         grid.appendChild(card);
       });
     }
-
-    // Initialize stats on page load
-    loadStats();
 
     renderScenarioGrid();
     renderChangeEventGrid();
