@@ -322,6 +322,48 @@
       .event-card { min-width: 90vw; max-width: 98vw; }
       .main-container { padding: 0 2vw 32px 2vw; }
     }
+
+    .status-msg.error {
+      color: #dc2626;
+    }
+
+    /* Simple Stats Dashboard */
+    .stats-container {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px auto;
+      max-width: 1200px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stats-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #111827;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .stat-box {
+      background: #f9fafb;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -329,6 +371,38 @@
     <h1>PagerDuty Demo - Incidents & Change Events</h1>
     <p>Trigger realistic incidents and send change events to demonstrate PagerDuty workflows.</p>
   </header>
+
+  <!-- Stats Dashboard -->
+  <div class="main-container">
+    <div class="stats-container">
+      <div class="stats-title">📊 Demo Statistics</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value" id="totalIncidents">0</div>
+          <div class="stat-label">Total Incidents</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="totalChangeEvents">0</div>
+          <div class="stat-label">Change Events</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="totalWorkflows">0</div>
+          <div class="stat-label">Workflows Run</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="multipleFailuresQueue">0</div>
+          <div class="stat-label">Multi-Incident Queue</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="header">📋 Incident Scenarios</div>
+    <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
+
+    <div class="header" style="margin-top: 48px;">🔄 Change Event Scenarios</div>
+    <div class="button-grid" id="changeEventGrid" aria-label="Change Event Scenarios"></div>
   <div class="main-container">
     <div class="header">📋 Incident Scenarios</div>
     <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
@@ -348,6 +422,60 @@
     </div>
   </div>
   <script>
+    // Statistics Tracking
+    const stats = {
+      incidents: 0,
+      changeEvents: 0,
+      workflows: 0,
+      multipleFailuresQueue: 0
+    };
+
+    function loadStats() {
+      const saved = localStorage.getItem('pagerduty_demo_stats');
+      if (saved) {
+        Object.assign(stats, JSON.parse(saved));
+        updateStatsDisplay();
+      }
+    }
+
+    function saveStats() {
+      localStorage.setItem('pagerduty_demo_stats', JSON.stringify(stats));
+    }
+
+    function updateStatsDisplay() {
+      document.getElementById('totalIncidents').textContent = stats.incidents;
+      document.getElementById('totalChangeEvents').textContent = stats.changeEvents;
+      document.getElementById('totalWorkflows').textContent = stats.workflows;
+      document.getElementById('multipleFailuresQueue').textContent = stats.multipleFailuresQueue;
+    }
+
+    function trackIncident() {
+      stats.incidents++;
+      saveStats();
+      updateStatsDisplay();
+    }
+
+    function trackChangeEvent() {
+      stats.changeEvents++;
+      saveStats();
+      updateStatsDisplay();
+    }
+
+    function trackWorkflow() {
+      stats.workflows++;
+      saveStats();
+      updateStatsDisplay();
+    }
+
+    function updateMultipleFailuresQueue(count) {
+      stats.multipleFailuresQueue = count;
+      saveStats();
+      updateStatsDisplay();
+    }
+
+    // Load stats on page load
+    loadStats();
+
     const scenarios = [
       {
         id: 'label_printer_offline',
@@ -826,6 +954,8 @@
             const scenarioNames = otherScenariosWithKeys.map(s => s.title).join(', ');
             let waveCount = 0;
             const totalWaves = 3;
+            const totalIncidents = otherScenariosWithKeys.length * totalWaves;
+            updateMultipleFailuresQueue(totalIncidents);
 
             function sendWave() {
               waveCount++;
@@ -875,6 +1005,11 @@
                   }, 10000);
                 } else {
                   // All waves complete
+                  const totalIncidents = otherScenariosWithKeys.length * totalWaves;
+                  for (let i = 0; i < totalIncidents; i++) {
+                    trackIncident();
+                  }
+                  updateMultipleFailuresQueue(0);
                   triggerBtn.dataset.running = 'false';
                   triggerBtn.disabled = false;
                   triggerBtn.textContent = 'Launch Incident';
@@ -933,6 +1068,7 @@
           .then(async response => {
             const data = await response.json();
             if (response.ok && data.status === 'success') {
+              trackIncident();
               showModal('success', 'Incident Triggered', 'PagerDuty incident triggered successfully.');
             } else {
               let msg = 'Failed to trigger incident.';
@@ -1106,6 +1242,7 @@
           .then(async response => {
             const data = await response.json();
             if (response.ok && data.status === 'success') {
+              trackChangeEvent();
               showModal('success', 'Change Event Sent', 'PagerDuty change event sent successfully.');
             } else {
               let msg = 'Failed to send change event.';
@@ -1228,6 +1365,7 @@
           async function executeStep() {
             if (stepIndex >= workflow.steps.length) {
               // Workflow complete
+              trackWorkflow();
               triggerBtn.dataset.running = 'false';
               triggerBtn.disabled = false;
               triggerBtn.textContent = 'Run Workflow';
