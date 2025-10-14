@@ -515,6 +515,98 @@
         triggerBtn.disabled = !getIntegrationKey(scenario.id);
 
         triggerBtn.addEventListener('click', function() {
+          // Special handling for multiple_failures scenario
+          if (scenario.id === 'multiple_failures') {
+            // Check if already running
+            if (triggerBtn.dataset.running === 'true') {
+              showModal('error', 'Already Running', 'Multiple failures scenario is already in progress. Please wait for it to complete.');
+              return;
+            }
+
+            // Get all other scenarios with saved keys
+            const otherScenariosWithKeys = scenarios.filter(s =>
+              s.id !== 'multiple_failures' && getIntegrationKey(s.id)
+            );
+
+            if (otherScenariosWithKeys.length === 0) {
+              showModal('error', 'No Keys Available', 'No other scenarios have integration keys saved. Please save keys for other scenarios first.');
+              return;
+            }
+
+            // Mark as running
+            triggerBtn.dataset.running = 'true';
+            triggerBtn.disabled = true;
+
+            const scenarioNames = otherScenariosWithKeys.map(s => s.title).join(', ');
+            let waveCount = 0;
+            const totalWaves = 3;
+
+            function sendWave() {
+              waveCount++;
+
+              // Send incidents for all scenarios with keys
+              const promises = otherScenariosWithKeys.map(s => {
+                const payload = {
+                  routing_key: getIntegrationKey(s.id),
+                  event_action: 'trigger',
+                  client: 'Change Events Demo',
+                  client_url: window.location.href,
+                  payload: {
+                    summary: s.payload.summary,
+                    severity: s.payload.severity,
+                    source: s.payload.source,
+                    custom_details: s.payload.custom_details
+                  }
+                };
+                return fetch('https://events.pagerduty.com/v2/enqueue', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+              });
+
+              Promise.all(promises).then(() => {
+                if (waveCount < totalWaves) {
+                  // Schedule next wave with countdown
+                  let countdown = 10;
+                  const countdownInterval = setInterval(() => {
+                    countdown--;
+                    triggerBtn.textContent = `Sending wave ${waveCount + 1} of ${totalWaves} to: ${scenarioNames} (${countdown}s)`;
+                    if (countdown <= 0) {
+                      clearInterval(countdownInterval);
+                    }
+                  }, 1000);
+
+                  setTimeout(() => {
+                    clearInterval(countdownInterval);
+                    sendWave();
+                  }, 10000);
+                } else {
+                  // All waves complete
+                  triggerBtn.dataset.running = 'false';
+                  triggerBtn.disabled = false;
+                  triggerBtn.textContent = 'Launch Incident';
+                  showModal('success', 'Events Sent Successfully', `All ${totalWaves} waves of incidents have been triggered for: ${scenarioNames}`);
+                }
+              }).catch(err => {
+                triggerBtn.dataset.running = 'false';
+                triggerBtn.disabled = false;
+                triggerBtn.textContent = 'Launch Incident';
+                showModal('error', 'Error', 'Failed to send some incidents: ' + err);
+              });
+
+              // Update button text for current wave
+              if (waveCount === 1) {
+                triggerBtn.textContent = `Sending wave ${waveCount} of ${totalWaves} to: ${scenarioNames}`;
+              }
+            }
+
+            // Start first wave
+            sendWave();
+            return;
+          }
+
+          // Original logic for all other scenarios
           const integrationKey = getIntegrationKey(scenario.id);
           if (!integrationKey) {
             showModal('error', 'No Integration Key', 'Please save an integration key for this scenario before triggering.');
