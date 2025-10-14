@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PagerDuty Incident Scenarios Demo</title>
+  <title>PagerDuty Demo - Incidents & Change Events</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     html, body {
@@ -239,9 +239,50 @@
     }
     .modal.success h2 { color: #059669; }
     .modal.error h2 { color: #e53e3e; }
+
+    /* Change Event Card Styling */
+    .change-event-card {
+      border-left: 4px solid #0891b2;
+    }
+    .change-event-card .trigger-btn {
+      background: #0891b2;
+    }
+    .change-event-card .trigger-btn:hover:not(:disabled) {
+      background: #0e7490;
+    }
+
+    /* Workflow Card Styling */
+    .workflow-card {
+      border-left: 4px solid #7c3aed;
+      grid-column: span 2;
+    }
+    .workflow-card .trigger-btn {
+      background: #7c3aed;
+    }
+    .workflow-card .trigger-btn:hover:not(:disabled) {
+      background: #6d28d9;
+    }
+    .workflow-steps {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 20px;
+      font-size: 0.95rem;
+      color: #4b5563;
+      text-align: left;
+    }
+    .workflow-steps ol {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+    .workflow-steps li {
+      margin: 4px 0;
+    }
+
     @media (max-width: 900px) {
       .main-container { max-width: 98vw; }
       .button-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+      .workflow-card { grid-column: span 1; }
     }
     @media (max-width: 600px) {
       .event-card { min-width: 90vw; max-width: 98vw; }
@@ -251,12 +292,19 @@
 </head>
 <body>
   <header>
-    <h1>PagerDuty Incident Scenarios Demo</h1>
-    <p>Each scenario can use its own integration key, stored securely in your browser.</p>
+    <h1>PagerDuty Demo - Incidents & Change Events</h1>
+    <p>Trigger realistic incidents and send change events to demonstrate PagerDuty workflows.</p>
   </header>
   <div class="main-container">
-    <div class="header">Incident Scenarios</div>
+    <div class="header">📋 Incident Scenarios</div>
     <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
+
+    <div class="header" style="margin-top: 48px;">🔄 Change Event Scenarios</div>
+    <div class="button-grid" id="changeEventGrid" aria-label="Change Event Scenarios"></div>
+
+    <div class="header" style="margin-top: 48px;">🎯 Demo Workflows</div>
+    <p style="text-align: center; color: #6b7280; margin-top: 8px; margin-bottom: 16px;">Automated sequences to demonstrate change correlation with incidents</p>
+    <div class="button-grid" id="workflowGrid" aria-label="Demo Workflows"></div>
   </div>
   <div id="modalBg" class="modal-bg" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div id="modal" class="modal" tabindex="-1">
@@ -342,20 +390,165 @@
           custom_details: { component: 'Load Balancer', error: 'S18' }
         }
       },
+      // Removed old generic "Change Event" card - replaced with specific change event scenarios below
+    ];
+
+    // Change Event Scenarios
+    const changeEventScenarios = [
       {
-        id: 'change_event',
-        title: 'Change Event',
-        desc: 'P1',
-        location: 'Git',
+        id: 'change_production_deploy',
+        title: 'Production Deployment',
+        desc: 'Deploy v2.4.0',
+        location: 'CI/CD Pipeline',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/ScRUSB8.png',
-        alt: 'Change Event',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Production+Deploy',
+        alt: 'Production Deployment',
+        isChangeEvent: true,
         payload: {
-          summary: 'Change event detected in Git',
-          severity: 'critical',
-          source: 'Git',
-          custom_details: { event: 'Change', system: 'GitHub' }
+          summary: 'Production deployment: v2.4.0 - Checkout service updates',
+          source: 'github-actions',
+          timestamp: () => new Date().toISOString(),
+          custom_details: {
+            version: 'v2.4.0',
+            service: 'checkout-service',
+            environment: 'production',
+            deployed_by: 'deploy-bot',
+            commit_sha: 'a3f5b2c',
+            repository: 'company/checkout-service',
+            branch: 'main',
+            changes: 'Updated payment flow, fixed cart bug, performance improvements'
+          }
         }
+      },
+      {
+        id: 'change_frontend_deploy',
+        title: 'Frontend Deployment',
+        desc: 'UI Updates',
+        location: 'Frontend',
+        locationClass: 'scenario-location',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Frontend+Deploy',
+        alt: 'Frontend Deployment',
+        isChangeEvent: true,
+        payload: {
+          summary: 'Frontend deployment: Updated checkout UI components',
+          source: 'github-actions',
+          timestamp: () => new Date().toISOString(),
+          custom_details: {
+            version: 'v3.2.1',
+            service: 'frontend-web-app',
+            environment: 'production',
+            deployed_by: 'frontend-team',
+            commit_sha: 'b7e9f1a',
+            repository: 'company/frontend-app',
+            changes: 'New checkout flow UI, improved mobile responsiveness'
+          }
+        }
+      },
+      {
+        id: 'change_database_migration',
+        title: 'Database Migration',
+        desc: 'Schema Changes',
+        location: 'Database',
+        locationClass: 'scenario-location',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Database+Migration',
+        alt: 'Database Migration',
+        isChangeEvent: true,
+        payload: {
+          summary: 'Database migration: Added indexes for performance optimization',
+          source: 'database-migration-tool',
+          timestamp: () => new Date().toISOString(),
+          custom_details: {
+            migration_id: '20240114_001',
+            database: 'production-db',
+            environment: 'production',
+            executed_by: 'dba-team',
+            duration_seconds: 45,
+            changes: 'Added indexes on orders.customer_id and payments.transaction_id',
+            tables_affected: ['orders', 'payments']
+          }
+        }
+      },
+      {
+        id: 'change_config_update',
+        title: 'Infrastructure Config Update',
+        desc: 'Load Balancer Rules',
+        location: 'Infrastructure',
+        locationClass: 'scenario-location',
+        img: 'https://via.placeholder.com/400x140/0891b2/ffffff?text=Config+Update',
+        alt: 'Config Update',
+        isChangeEvent: true,
+        payload: {
+          summary: 'Load balancer configuration updated - New routing rules',
+          source: 'terraform',
+          timestamp: () => new Date().toISOString(),
+          custom_details: {
+            component: 'load-balancer-prod-01',
+            environment: 'production',
+            change_type: 'configuration',
+            changed_by: 'devops-team',
+            tool: 'Terraform v1.6.0',
+            changes: 'Updated routing rules, increased timeout to 60s, added /health endpoint',
+            affected_services: ['checkout-service', 'payment-api']
+          }
+        }
+      }
+    ];
+
+    // Demo Workflow Scenarios
+    const workflowScenarios = [
+      {
+        id: 'workflow_deploy_then_incident',
+        title: '🎯 Workflow 1: Deployment Causes Incident',
+        desc: 'Quick Demo (90 seconds)',
+        location: 'Automated Workflow',
+        locationClass: 'scenario-location',
+        img: 'https://via.placeholder.com/400x140/7c3aed/ffffff?text=Workflow+1',
+        alt: 'Deploy Then Incident Workflow',
+        isWorkflow: true,
+        steps: [
+          {
+            action: 'send_change_event',
+            scenario_id: 'change_production_deploy',
+            delay_after: 30000
+          },
+          {
+            action: 'trigger_incident',
+            scenario_id: 'checkout_404',
+            delay_after: 0
+          }
+        ]
+      },
+      {
+        id: 'workflow_multiple_changes',
+        title: '🎯 Workflow 2: Multiple Changes Before Incident',
+        desc: 'Realistic Demo (2 minutes)',
+        location: 'Automated Workflow',
+        locationClass: 'scenario-location',
+        img: 'https://via.placeholder.com/400x140/7c3aed/ffffff?text=Workflow+2',
+        alt: 'Multiple Changes Workflow',
+        isWorkflow: true,
+        steps: [
+          {
+            action: 'send_change_event',
+            scenario_id: 'change_frontend_deploy',
+            delay_after: 15000
+          },
+          {
+            action: 'send_change_event',
+            scenario_id: 'change_production_deploy',
+            delay_after: 15000
+          },
+          {
+            action: 'send_change_event',
+            scenario_id: 'change_database_migration',
+            delay_after: 30000
+          },
+          {
+            action: 'trigger_incident',
+            scenario_id: 'load_balancer_error',
+            delay_after: 0
+          }
+        ]
       }
     ];
 
@@ -660,7 +853,384 @@
         grid.appendChild(card);
       });
     }
+
+    function renderChangeEventGrid() {
+      const grid = document.getElementById('changeEventGrid');
+      grid.innerHTML = '';
+      changeEventScenarios.forEach(scenario => {
+        const card = document.createElement('div');
+        card.className = 'event-card change-event-card';
+        card.setAttribute('data-scenario', scenario.id);
+
+        const img = document.createElement('img');
+        img.className = 'product-img';
+        img.src = scenario.img;
+        img.alt = scenario.alt;
+        card.appendChild(img);
+
+        const title = document.createElement('div');
+        title.className = 'event-title';
+        title.textContent = scenario.title;
+        card.appendChild(title);
+
+        const desc = document.createElement('div');
+        desc.className = 'event-desc';
+        desc.textContent = scenario.desc;
+        card.appendChild(desc);
+
+        const location = document.createElement('span');
+        location.className = scenario.locationClass;
+        location.textContent = scenario.location;
+        card.appendChild(location);
+
+        const triggerBtn = document.createElement('button');
+        triggerBtn.className = 'trigger-btn';
+        triggerBtn.type = 'button';
+        triggerBtn.textContent = 'Send Change Event';
+        triggerBtn.setAttribute('aria-label', `Send ${scenario.title}`);
+        triggerBtn.style.marginBottom = '10px';
+        card.appendChild(triggerBtn);
+
+        // Integration key section for change events
+        const keySection = document.createElement('div');
+        keySection.className = 'key-section';
+
+        const keyLabel = document.createElement('label');
+        keyLabel.className = 'key-label';
+        keyLabel.setAttribute('for', `key-input-${scenario.id}`);
+        keyLabel.textContent = 'Integration Key:';
+        keySection.appendChild(keyLabel);
+
+        const keyInputRow = document.createElement('div');
+        keyInputRow.className = 'key-input-row';
+
+        const keyInput = document.createElement('input');
+        keyInput.className = 'key-input';
+        keyInput.type = 'password';
+        keyInput.id = `key-input-${scenario.id}`;
+        keyInput.setAttribute('aria-label', `Integration key for ${scenario.title}`);
+        keyInput.autocomplete = 'off';
+        keyInput.value = getIntegrationKey(scenario.id);
+        keyInput.placeholder = 'Paste integration key...';
+        keyInputRow.appendChild(keyInput);
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'key-btn';
+        saveBtn.type = 'button';
+        saveBtn.textContent = 'Save';
+        saveBtn.setAttribute('aria-label', `Save integration key for ${scenario.title}`);
+        keyInputRow.appendChild(saveBtn);
+
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'key-btn key-clear-btn';
+        clearBtn.type = 'button';
+        clearBtn.textContent = 'Clear';
+        clearBtn.setAttribute('aria-label', `Clear integration key for ${scenario.title}`);
+        keyInputRow.appendChild(clearBtn);
+
+        keySection.appendChild(keyInputRow);
+
+        const keyStatus = document.createElement('div');
+        keyStatus.className = 'key-status';
+        keyStatus.id = `key-status-${scenario.id}`;
+        keySection.appendChild(keyStatus);
+
+        card.appendChild(keySection);
+
+        function updateKeyStatus() {
+          const key = getIntegrationKey(scenario.id);
+          if (key) {
+            keyStatus.textContent = 'Key saved';
+            keyStatus.style.color = '#059669';
+            keyInput.value = key;
+          } else {
+            keyStatus.textContent = 'No key saved';
+            keyStatus.style.color = '#e53e3e';
+            keyInput.value = '';
+          }
+        }
+        updateKeyStatus();
+
+        saveBtn.addEventListener('click', function() {
+          const val = keyInput.value.trim();
+          if (val.length < 32) {
+            keyStatus.textContent = 'Key too short';
+            keyStatus.style.color = '#e53e3e';
+            return;
+          }
+          saveIntegrationKey(scenario.id, val);
+          updateKeyStatus();
+          triggerBtn.disabled = false;
+        });
+
+        clearBtn.addEventListener('click', function() {
+          clearIntegrationKey(scenario.id);
+          updateKeyStatus();
+          triggerBtn.disabled = true;
+        });
+
+        keyInput.addEventListener('input', function() {
+          triggerBtn.disabled = this.value.trim().length < 32;
+        });
+
+        triggerBtn.disabled = !getIntegrationKey(scenario.id);
+
+        triggerBtn.addEventListener('click', function() {
+          const integrationKey = getIntegrationKey(scenario.id);
+          if (!integrationKey) {
+            showModal('error', 'No Integration Key', 'Please save an integration key for this scenario before sending.');
+            return;
+          }
+          triggerBtn.disabled = true;
+          triggerBtn.textContent = 'Sending...';
+
+          // Build change event payload
+          const payload = {
+            routing_key: integrationKey,
+            payload: {
+              summary: scenario.payload.summary,
+              source: scenario.payload.source,
+              timestamp: typeof scenario.payload.timestamp === 'function' ? scenario.payload.timestamp() : scenario.payload.timestamp,
+              custom_details: scenario.payload.custom_details
+            }
+          };
+
+          fetch('https://events.pagerduty.com/v2/change/enqueue', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(async response => {
+            const data = await response.json();
+            if (response.ok && data.status === 'success') {
+              showModal('success', 'Change Event Sent', 'PagerDuty change event sent successfully.');
+            } else {
+              let msg = 'Failed to send change event.';
+              if (data.errors && data.errors.length) msg += ' ' + data.errors.join(' ');
+              showModal('error', 'Error', msg);
+            }
+          })
+          .catch(err => {
+            showModal('error', 'Network Error', 'Could not reach PagerDuty Events API. ' + err);
+          })
+          .finally(() => {
+            triggerBtn.disabled = false;
+            triggerBtn.textContent = 'Send Change Event';
+          });
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    function renderWorkflowGrid() {
+      const grid = document.getElementById('workflowGrid');
+      grid.innerHTML = '';
+      workflowScenarios.forEach(workflow => {
+        const card = document.createElement('div');
+        card.className = 'event-card workflow-card';
+        card.setAttribute('data-scenario', workflow.id);
+
+        const img = document.createElement('img');
+        img.className = 'product-img';
+        img.src = workflow.img;
+        img.alt = workflow.alt;
+        card.appendChild(img);
+
+        const title = document.createElement('div');
+        title.className = 'event-title';
+        title.textContent = workflow.title;
+        card.appendChild(title);
+
+        const desc = document.createElement('div');
+        desc.className = 'event-desc';
+        desc.textContent = workflow.desc;
+        card.appendChild(desc);
+
+        const location = document.createElement('span');
+        location.className = workflow.locationClass;
+        location.textContent = workflow.location;
+        card.appendChild(location);
+
+        // Workflow steps display
+        const stepsDiv = document.createElement('div');
+        stepsDiv.className = 'workflow-steps';
+        const stepsList = document.createElement('ol');
+        workflow.steps.forEach(step => {
+          const li = document.createElement('li');
+          if (step.action === 'send_change_event') {
+            const changeScenario = changeEventScenarios.find(s => s.id === step.scenario_id);
+            li.textContent = `Send: ${changeScenario ? changeScenario.title : step.scenario_id}`;
+          } else if (step.action === 'trigger_incident') {
+            const incidentScenario = scenarios.find(s => s.id === step.scenario_id);
+            li.textContent = `Trigger: ${incidentScenario ? incidentScenario.title : step.scenario_id}`;
+          }
+          if (step.delay_after > 0) {
+            li.textContent += ` → Wait ${step.delay_after / 1000}s`;
+          }
+          stepsList.appendChild(li);
+        });
+        stepsDiv.appendChild(stepsList);
+        card.appendChild(stepsDiv);
+
+        const triggerBtn = document.createElement('button');
+        triggerBtn.className = 'trigger-btn';
+        triggerBtn.type = 'button';
+        triggerBtn.textContent = 'Run Workflow';
+        triggerBtn.setAttribute('aria-label', `Run ${workflow.title}`);
+        triggerBtn.style.marginTop = '10px';
+        card.appendChild(triggerBtn);
+
+        const statusDiv = document.createElement('div');
+        statusDiv.className = 'key-status';
+        statusDiv.style.marginTop = '10px';
+        statusDiv.style.textAlign = 'center';
+        card.appendChild(statusDiv);
+
+        // Check if all required scenarios have keys
+        function checkWorkflowReady() {
+          const requiredScenarios = workflow.steps.map(step => {
+            if (step.action === 'send_change_event') {
+              return changeEventScenarios.find(s => s.id === step.scenario_id);
+            } else if (step.action === 'trigger_incident') {
+              return scenarios.find(s => s.id === step.scenario_id);
+            }
+            return null;
+          }).filter(s => s !== null);
+
+          const missingKeys = requiredScenarios.filter(s => !getIntegrationKey(s.id));
+
+          if (missingKeys.length > 0) {
+            triggerBtn.disabled = true;
+            statusDiv.textContent = `Missing keys: ${missingKeys.map(s => s.title).join(', ')}`;
+            statusDiv.style.color = '#e53e3e';
+            return false;
+          } else {
+            triggerBtn.disabled = false;
+            statusDiv.textContent = 'Ready to run';
+            statusDiv.style.color = '#059669';
+            return true;
+          }
+        }
+        checkWorkflowReady();
+
+        triggerBtn.addEventListener('click', async function() {
+          if (!checkWorkflowReady()) {
+            showModal('error', 'Missing Keys', 'Please save integration keys for all required scenarios first.');
+            return;
+          }
+
+          if (triggerBtn.dataset.running === 'true') {
+            showModal('error', 'Already Running', 'This workflow is already in progress. Please wait for it to complete.');
+            return;
+          }
+
+          triggerBtn.dataset.running = 'true';
+          triggerBtn.disabled = true;
+
+          let stepIndex = 0;
+
+          async function executeStep() {
+            if (stepIndex >= workflow.steps.length) {
+              // Workflow complete
+              triggerBtn.dataset.running = 'false';
+              triggerBtn.disabled = false;
+              triggerBtn.textContent = 'Run Workflow';
+              statusDiv.textContent = 'Ready to run';
+              statusDiv.style.color = '#059669';
+              showModal('success', 'Workflow Complete', 'All steps have been executed successfully. Check PagerDuty to see the correlation!');
+              return;
+            }
+
+            const step = workflow.steps[stepIndex];
+            let scenario;
+            let endpoint;
+            let payload;
+
+            if (step.action === 'send_change_event') {
+              scenario = changeEventScenarios.find(s => s.id === step.scenario_id);
+              endpoint = 'https://events.pagerduty.com/v2/change/enqueue';
+              statusDiv.textContent = `Step ${stepIndex + 1}/${workflow.steps.length}: Sending ${scenario.title}...`;
+              statusDiv.style.color = '#2563eb';
+
+              payload = {
+                routing_key: getIntegrationKey(scenario.id),
+                payload: {
+                  summary: scenario.payload.summary,
+                  source: scenario.payload.source,
+                  timestamp: typeof scenario.payload.timestamp === 'function' ? scenario.payload.timestamp() : scenario.payload.timestamp,
+                  custom_details: scenario.payload.custom_details
+                }
+              };
+            } else if (step.action === 'trigger_incident') {
+              scenario = scenarios.find(s => s.id === step.scenario_id);
+              endpoint = 'https://events.pagerduty.com/v2/enqueue';
+              statusDiv.textContent = `Step ${stepIndex + 1}/${workflow.steps.length}: Triggering ${scenario.title}...`;
+              statusDiv.style.color = '#2563eb';
+
+              payload = {
+                routing_key: getIntegrationKey(scenario.id),
+                event_action: 'trigger',
+                client: 'Change Events Demo',
+                client_url: window.location.href,
+                payload: {
+                  summary: scenario.payload.summary,
+                  severity: scenario.payload.severity,
+                  source: scenario.payload.source,
+                  custom_details: scenario.payload.custom_details
+                }
+              };
+            }
+
+            try {
+              const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+
+              const data = await response.json();
+              if (!response.ok || data.status !== 'success') {
+                throw new Error(data.errors ? data.errors.join(' ') : 'Failed to execute step');
+              }
+
+              // Wait for delay if specified
+              if (step.delay_after > 0) {
+                let countdown = step.delay_after / 1000;
+                const countdownInterval = setInterval(() => {
+                  countdown--;
+                  statusDiv.textContent = `Step ${stepIndex + 1}/${workflow.steps.length} complete. Next step in ${countdown}s...`;
+                  if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                  }
+                }, 1000);
+
+                await new Promise(resolve => setTimeout(resolve, step.delay_after));
+                clearInterval(countdownInterval);
+              }
+
+              stepIndex++;
+              executeStep();
+            } catch (err) {
+              triggerBtn.dataset.running = 'false';
+              triggerBtn.disabled = false;
+              triggerBtn.textContent = 'Run Workflow';
+              statusDiv.textContent = 'Error occurred';
+              statusDiv.style.color = '#e53e3e';
+              showModal('error', 'Workflow Error', 'Failed to execute workflow: ' + err.message);
+            }
+          }
+
+          executeStep();
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
     renderScenarioGrid();
+    renderChangeEventGrid();
+    renderWorkflowGrid();
   </script>
 </body>
 </html>
