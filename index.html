@@ -365,18 +365,18 @@
         }
       },
       {
-        id: 'multiple_failures',
-        title: 'Multiple Failures',
+        id: 'fraudulent_card_activity',
+        title: 'Fraudulent Card Activity Suspected',
         desc: 'P1',
-        location: 'Multiple Services at Once',
+        location: 'Finance',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/kvbUXW7.jpeg',
-        alt: 'Multiple Failures',
+        img: 'https://i.imgur.com/j9Valif.jpeg',
+        alt: 'Fraudulent Card Activity Suspected',
         payload: {
-          summary: 'Multiple critical failures detected across services',
+          summary: 'Fraudulent card activity detected',
           severity: 'critical',
-          source: 'Service Monitor',
-          custom_details: { affected: 'Multiple', error: 'Simultaneous failures' }
+          source: 'Finance',
+          custom_details: { activity: 'Fraudulent', system: 'Card Processing' }
         }
       },
       {
@@ -395,18 +395,18 @@
         }
       },
       {
-        id: 'fraudulent_card_activity',
-        title: 'Fraudulent Card Activity Suspected',
+        id: 'multiple_failures',
+        title: 'Multiple Failures',
         desc: 'P1',
-        location: 'Finance',
+        location: 'Multiple Services at Once',
         locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/j9Valif.jpeg',
-        alt: 'Fraudulent Card Activity Suspected',
+        img: 'https://i.imgur.com/kvbUXW7.jpeg',
+        alt: 'Multiple Failures',
         payload: {
-          summary: 'Fraudulent card activity detected',
+          summary: 'Multiple critical failures detected across services',
           severity: 'critical',
-          source: 'Finance',
-          custom_details: { activity: 'Fraudulent', system: 'Card Processing' }
+          source: 'Service Monitor',
+          custom_details: { affected: 'Multiple', error: 'Simultaneous failures' }
         }
       },
       {
