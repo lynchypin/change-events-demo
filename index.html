@@ -62,7 +62,7 @@
       align-items: stretch;
       position: relative;
       transition: box-shadow 0.2s;
-      min-height: 420px;
+      min-height: 380px;
     }
     .event-card:hover {
       box-shadow: 0 4px 20px rgba(0,0,0,0.13);
@@ -99,8 +99,6 @@
       text-align: center;
       margin-bottom: 10px;
       margin-top: 2px;
-      text-decoration: underline;
-      cursor: pointer;
     }
     .trigger-btn {
       margin: 0 auto 10px auto;
@@ -279,6 +277,26 @@
       margin: 4px 0;
     }
 
+    /* Expandable Section Styling */
+    .expanded-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+      grid-column: 1 / -1;
+    }
+    .expanded-section.open {
+      max-height: 2000px;
+      opacity: 1;
+      transition: max-height 0.5s ease-in, opacity 0.4s ease-in;
+    }
+    .expanded-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 32px;
+      padding: 20px 0;
+    }
+
     @media (max-width: 900px) {
       .main-container { max-width: 98vw; }
       .button-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
@@ -388,6 +406,22 @@
           severity: 'critical',
           source: 'Backend',
           custom_details: { component: 'Load Balancer', error: 'S18' }
+        }
+      },
+      {
+        id: 'change_event',
+        title: 'Change Event',
+        desc: 'P1',
+        location: 'Git',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/ScRUSB8.png',
+        alt: 'Change Event',
+        isExpandable: true,
+        payload: {
+          summary: 'Change event detected in Git',
+          severity: 'critical',
+          source: 'Git',
+          custom_details: { event: 'Change', system: 'GitHub' }
         }
       },
       // Removed old generic "Change Event" card - replaced with specific change event scenarios below
@@ -619,10 +653,28 @@
         const triggerBtn = document.createElement('button');
         triggerBtn.className = 'trigger-btn';
         triggerBtn.type = 'button';
-        triggerBtn.textContent = 'Launch Incident';
+        triggerBtn.textContent = scenario.isExpandable ? 'Choose Scenario' : 'Launch Incident';
         triggerBtn.setAttribute('aria-label', `Trigger ${scenario.title}`);
         triggerBtn.style.marginBottom = '10px';
         card.appendChild(triggerBtn);
+
+        // Handle expandable card (Change Event)
+        if (scenario.isExpandable) {
+          // Don't show integration key section for expandable card
+          triggerBtn.disabled = false;
+
+          triggerBtn.addEventListener('click', function() {
+            // Toggle the expanded section
+            const expandedSection = document.getElementById('expandedChangeEvents');
+            if (expandedSection) {
+              expandedSection.classList.toggle('open');
+              triggerBtn.textContent = expandedSection.classList.contains('open') ? 'Hide Scenarios' : 'Choose Scenario';
+            }
+          });
+
+          grid.appendChild(card);
+          return; // Skip the rest of the logic for expandable cards
+        }
 
         // Only show integration key section for non-multiple_failures scenarios
         if (scenario.id !== 'multiple_failures') {
@@ -852,10 +904,24 @@
 
         grid.appendChild(card);
       });
+
+      // Add expanded section for change events after all cards
+      const expandedSection = document.createElement('div');
+      expandedSection.id = 'expandedChangeEvents';
+      expandedSection.className = 'expanded-section';
+
+      const expandedGrid = document.createElement('div');
+      expandedGrid.className = 'expanded-grid';
+      expandedGrid.id = 'expandedChangeEventsGrid';
+
+      expandedSection.appendChild(expandedGrid);
+      grid.appendChild(expandedSection);
     }
 
     function renderChangeEventGrid() {
-      const grid = document.getElementById('changeEventGrid');
+      const grid = document.getElementById('expandedChangeEventsGrid');
+      if (!grid) return; // Grid might not exist yet
+
       grid.innerHTML = '';
       changeEventScenarios.forEach(scenario => {
         const card = document.createElement('div');
