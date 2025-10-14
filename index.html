@@ -62,7 +62,7 @@
       align-items: stretch;
       position: relative;
       transition: box-shadow 0.2s;
-      min-height: 380px;
+      min-height: 340px;
     }
     .event-card:hover {
       box-shadow: 0 4px 20px rgba(0,0,0,0.13);
@@ -81,24 +81,40 @@
     .event-title {
       font-size: 1.18rem;
       font-weight: 600;
-      margin: 12px 0 2px 0;
+      margin: 12px 0 12px 0;
       color: #222;
       text-align: center;
     }
-    .event-desc {
-      font-size: 1.02rem;
-      color: #374151;
-      text-align: center;
-      margin-bottom: 2px;
+    .priority-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 12px 0;
+      gap: 8px;
     }
-    .scenario-location {
-      display: block;
-      font-weight: bold;
-      color: #2563eb;
-      font-size: 1.08rem;
-      text-align: center;
-      margin-bottom: 10px;
-      margin-top: 2px;
+    .priority-label {
+      font-size: 0.95rem;
+      color: #374151;
+      font-weight: 500;
+    }
+    .priority-select {
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      border: 2px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #374151;
+      cursor: pointer;
+      font-weight: 600;
+      transition: border-color 0.2s;
+    }
+    .priority-select:hover {
+      border-color: #9ca3af;
+    }
+    .priority-select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
     .trigger-btn {
       margin: 0 auto 10px auto;
@@ -640,15 +656,33 @@
         title.textContent = scenario.title;
         card.appendChild(title);
 
-        const desc = document.createElement('div');
-        desc.className = 'event-desc';
-        desc.textContent = scenario.desc;
-        card.appendChild(desc);
+        // Priority dropdown (replacing the P1 desc)
+        if (!scenario.isExpandable) {
+          const priorityContainer = document.createElement('div');
+          priorityContainer.className = 'priority-container';
 
-        const location = document.createElement('span');
-        location.className = scenario.locationClass;
-        location.textContent = scenario.location;
-        card.appendChild(location);
+          const priorityLabel = document.createElement('label');
+          priorityLabel.className = 'priority-label';
+          priorityLabel.textContent = 'Priority: ';
+          priorityLabel.setAttribute('for', `priority-${scenario.id}`);
+
+          const prioritySelect = document.createElement('select');
+          prioritySelect.className = 'priority-select';
+          prioritySelect.id = `priority-${scenario.id}`;
+          prioritySelect.setAttribute('aria-label', `Priority level for ${scenario.title}`);
+
+          for (let i = 1; i <= 5; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `P${i}`;
+            if (i === 1) option.selected = true; // Default to P1
+            prioritySelect.appendChild(option);
+          }
+
+          priorityContainer.appendChild(priorityLabel);
+          priorityContainer.appendChild(prioritySelect);
+          card.appendChild(priorityContainer);
+        }
 
         const triggerBtn = document.createElement('button');
         triggerBtn.className = 'trigger-btn';
@@ -798,6 +832,12 @@
 
               // Send incidents for all scenarios with keys
               const promises = otherScenariosWithKeys.map(s => {
+                // Get priority from dropdown
+                const prioritySelect = document.getElementById(`priority-${s.id}`);
+                const priority = prioritySelect ? prioritySelect.value : '1';
+                const severityMap = { '1': 'critical', '2': 'error', '3': 'warning', '4': 'info', '5': 'info' };
+                const severity = severityMap[priority] || 'critical';
+
                 const payload = {
                   routing_key: getIntegrationKey(s.id),
                   event_action: 'trigger',
@@ -805,7 +845,7 @@
                   client_url: window.location.href,
                   payload: {
                     summary: s.payload.summary,
-                    severity: s.payload.severity,
+                    severity: severity,
                     source: s.payload.source,
                     custom_details: s.payload.custom_details
                   }
@@ -864,6 +904,13 @@
             showModal('error', 'No Integration Key', 'Please save an integration key for this scenario before triggering.');
             return;
           }
+
+          // Get priority from dropdown
+          const prioritySelect = document.getElementById(`priority-${scenario.id}`);
+          const priority = prioritySelect ? prioritySelect.value : '1';
+          const severityMap = { '1': 'critical', '2': 'error', '3': 'warning', '4': 'info', '5': 'info' };
+          const severity = severityMap[priority] || 'critical';
+
           triggerBtn.disabled = true;
           triggerBtn.textContent = 'Sending...';
           const payload = {
@@ -873,7 +920,7 @@
             client_url: window.location.href,
             payload: {
               summary: scenario.payload.summary,
-              severity: scenario.payload.severity,
+              severity: severity,
               source: scenario.payload.source,
               custom_details: scenario.payload.custom_details
             }
@@ -938,16 +985,6 @@
         title.className = 'event-title';
         title.textContent = scenario.title;
         card.appendChild(title);
-
-        const desc = document.createElement('div');
-        desc.className = 'event-desc';
-        desc.textContent = scenario.desc;
-        card.appendChild(desc);
-
-        const location = document.createElement('span');
-        location.className = scenario.locationClass;
-        location.textContent = scenario.location;
-        card.appendChild(location);
 
         const triggerBtn = document.createElement('button');
         triggerBtn.className = 'trigger-btn';
@@ -1108,15 +1145,7 @@
         title.textContent = workflow.title;
         card.appendChild(title);
 
-        const desc = document.createElement('div');
-        desc.className = 'event-desc';
-        desc.textContent = workflow.desc;
-        card.appendChild(desc);
-
-        const location = document.createElement('span');
-        location.className = workflow.locationClass;
-        location.textContent = workflow.location;
-        card.appendChild(location);
+        // Workflow steps display
 
         // Workflow steps display
         const stepsDiv = document.createElement('div');
