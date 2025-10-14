@@ -431,88 +431,95 @@
         triggerBtn.style.marginBottom = '10px';
         card.appendChild(triggerBtn);
 
-        const keySection = document.createElement('div');
-        keySection.className = 'key-section';
+        // Only show integration key section for non-multiple_failures scenarios
+        if (scenario.id !== 'multiple_failures') {
+          const keySection = document.createElement('div');
+          keySection.className = 'key-section';
 
-        const keyLabel = document.createElement('label');
-        keyLabel.className = 'key-label';
-        keyLabel.setAttribute('for', `key-input-${scenario.id}`);
-        keyLabel.textContent = 'Integration Key:';
-        keySection.appendChild(keyLabel);
+          const keyLabel = document.createElement('label');
+          keyLabel.className = 'key-label';
+          keyLabel.setAttribute('for', `key-input-${scenario.id}`);
+          keyLabel.textContent = 'Integration Key:';
+          keySection.appendChild(keyLabel);
 
-        const keyInputRow = document.createElement('div');
-        keyInputRow.className = 'key-input-row';
+          const keyInputRow = document.createElement('div');
+          keyInputRow.className = 'key-input-row';
 
-        const keyInput = document.createElement('input');
-        keyInput.className = 'key-input';
-        keyInput.type = 'password';
-        keyInput.id = `key-input-${scenario.id}`;
-        keyInput.setAttribute('aria-label', `Integration key for ${scenario.title}`);
-        keyInput.autocomplete = 'off';
-        keyInput.value = getIntegrationKey(scenario.id);
-        keyInput.placeholder = 'Paste integration key...';
-        keyInputRow.appendChild(keyInput);
+          const keyInput = document.createElement('input');
+          keyInput.className = 'key-input';
+          keyInput.type = 'password';
+          keyInput.id = `key-input-${scenario.id}`;
+          keyInput.setAttribute('aria-label', `Integration key for ${scenario.title}`);
+          keyInput.autocomplete = 'off';
+          keyInput.value = getIntegrationKey(scenario.id);
+          keyInput.placeholder = 'Paste integration key...';
+          keyInputRow.appendChild(keyInput);
 
-        const saveBtn = document.createElement('button');
-        saveBtn.className = 'key-btn';
-        saveBtn.type = 'button';
-        saveBtn.textContent = 'Save';
-        saveBtn.setAttribute('aria-label', `Save integration key for ${scenario.title}`);
-        keyInputRow.appendChild(saveBtn);
+          const saveBtn = document.createElement('button');
+          saveBtn.className = 'key-btn';
+          saveBtn.type = 'button';
+          saveBtn.textContent = 'Save';
+          saveBtn.setAttribute('aria-label', `Save integration key for ${scenario.title}`);
+          keyInputRow.appendChild(saveBtn);
 
-        const clearBtn = document.createElement('button');
-        clearBtn.className = 'key-btn key-clear-btn';
-        clearBtn.type = 'button';
-        clearBtn.textContent = 'Clear';
-        clearBtn.setAttribute('aria-label', `Clear integration key for ${scenario.title}`);
-        keyInputRow.appendChild(clearBtn);
+          const clearBtn = document.createElement('button');
+          clearBtn.className = 'key-btn key-clear-btn';
+          clearBtn.type = 'button';
+          clearBtn.textContent = 'Clear';
+          clearBtn.setAttribute('aria-label', `Clear integration key for ${scenario.title}`);
+          keyInputRow.appendChild(clearBtn);
 
-        keySection.appendChild(keyInputRow);
+          keySection.appendChild(keyInputRow);
 
-        const keyStatus = document.createElement('div');
-        keyStatus.className = 'key-status';
-        keyStatus.id = `key-status-${scenario.id}`;
-        keySection.appendChild(keyStatus);
+          const keyStatus = document.createElement('div');
+          keyStatus.className = 'key-status';
+          keyStatus.id = `key-status-${scenario.id}`;
+          keySection.appendChild(keyStatus);
 
-        card.appendChild(keySection);
+          card.appendChild(keySection);
 
-        function updateKeyStatus() {
-          const key = getIntegrationKey(scenario.id);
-          if (key) {
-            keyStatus.textContent = 'Key saved';
-            keyStatus.style.color = '#059669';
-            keyInput.value = key;
-          } else {
-            keyStatus.textContent = 'No key saved';
-            keyStatus.style.color = '#e53e3e';
-            keyInput.value = '';
+          function updateKeyStatus() {
+            const key = getIntegrationKey(scenario.id);
+            if (key) {
+              keyStatus.textContent = 'Key saved';
+              keyStatus.style.color = '#059669';
+              keyInput.value = key;
+            } else {
+              keyStatus.textContent = 'No key saved';
+              keyStatus.style.color = '#e53e3e';
+              keyInput.value = '';
+            }
           }
+          updateKeyStatus();
+
+          saveBtn.addEventListener('click', function() {
+            const val = keyInput.value.trim();
+            if (val.length < 32) {
+              keyStatus.textContent = 'Key too short';
+              keyStatus.style.color = '#e53e3e';
+              return;
+            }
+            saveIntegrationKey(scenario.id, val);
+            updateKeyStatus();
+            triggerBtn.disabled = false;
+          });
+
+          clearBtn.addEventListener('click', function() {
+            clearIntegrationKey(scenario.id);
+            updateKeyStatus();
+            triggerBtn.disabled = true;
+          });
+
+          keyInput.addEventListener('input', function() {
+            triggerBtn.disabled = this.value.trim().length < 32;
+          });
+
+          triggerBtn.disabled = !getIntegrationKey(scenario.id);
+        } else {
+          // For multiple_failures, check if any other scenario has a key
+          const hasAnyKey = scenarios.some(s => s.id !== 'multiple_failures' && getIntegrationKey(s.id));
+          triggerBtn.disabled = !hasAnyKey;
         }
-        updateKeyStatus();
-
-        saveBtn.addEventListener('click', function() {
-          const val = keyInput.value.trim();
-          if (val.length < 32) {
-            keyStatus.textContent = 'Key too short';
-            keyStatus.style.color = '#e53e3e';
-            return;
-          }
-          saveIntegrationKey(scenario.id, val);
-          updateKeyStatus();
-          triggerBtn.disabled = false;
-        });
-
-        clearBtn.addEventListener('click', function() {
-          clearIntegrationKey(scenario.id);
-          updateKeyStatus();
-          triggerBtn.disabled = true;
-        });
-
-        keyInput.addEventListener('input', function() {
-          triggerBtn.disabled = this.value.trim().length < 32;
-        });
-
-        triggerBtn.disabled = !getIntegrationKey(scenario.id);
 
         triggerBtn.addEventListener('click', function() {
           // Special handling for multiple_failures scenario
