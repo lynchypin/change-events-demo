@@ -410,21 +410,6 @@
         }
       },
       {
-        id: 'load_balancer_error',
-        title: 'Load Balancer Error',
-        desc: 'P1',
-        location: 'Backend',
-        locationClass: 'scenario-location',
-        img: 'https://i.imgur.com/x23q15w.jpeg',
-        alt: 'Load Balancer Error',
-        payload: {
-          summary: 'Load balancer error detected',
-          severity: 'critical',
-          source: 'Backend',
-          custom_details: { component: 'Load Balancer', error: 'S18' }
-        }
-      },
-      {
         id: 'change_event',
         title: 'Change Event',
         desc: 'P1',
@@ -438,6 +423,21 @@
           severity: 'critical',
           source: 'Git',
           custom_details: { event: 'Change', system: 'GitHub' }
+        }
+      },
+      {
+        id: 'load_balancer_error',
+        title: 'Load Balancer Error',
+        desc: 'P1',
+        location: 'Backend',
+        locationClass: 'scenario-location',
+        img: 'https://i.imgur.com/x23q15w.jpeg',
+        alt: 'Load Balancer Error',
+        payload: {
+          summary: 'Load balancer error detected',
+          severity: 'critical',
+          source: 'Backend',
+          custom_details: { component: 'Load Balancer', error: 'S18' }
         }
       },
       // Removed old generic "Change Event" card - replaced with specific change event scenarios below
