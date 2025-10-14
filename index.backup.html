@@ -440,137 +440,10 @@
       padding: 24px 0;
     }
 
-    /* Statistics Dashboard */
-    .stats-dashboard {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 32px;
-      margin: 32px auto;
-      max-width: 1200px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-    }
-    .stats-header {
-      text-align: center;
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      color: #1e293b;
-      letter-spacing: -0.5px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 2px solid #e2e8f0;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-    }
-    .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      border-color: #cbd5e1;
-    }
-    .stat-icon {
-      font-size: 2rem;
-      margin-bottom: 12px;
-    }
-    .stat-value {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #1e293b;
-      margin: 8px 0;
-      letter-spacing: -1px;
-    }
-    .stat-label {
-      font-size: 0.95rem;
-      color: #64748b;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .stat-change {
-      font-size: 0.85rem;
-      margin-top: 8px;
-      font-weight: 600;
-    }
-    .stat-change.positive {
-      color: #059669;
-    }
-    .stat-change.neutral {
-      color: #64748b;
-    }
-    .progress-section {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 2px solid #e2e8f0;
-    }
-    .progress-item {
-      margin-bottom: 20px;
-    }
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .progress-label {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #475569;
-    }
-    .progress-value {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    .progress-bar-container {
-      width: 100%;
-      height: 12px;
-      background: #e2e8f0;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-    }
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-      border-radius: 10px;
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-    }
-    .progress-bar.incidents {
-      background: linear-gradient(90deg, #ef4444 0%, #f97316 100%);
-    }
-    .progress-bar.changes {
-      background: linear-gradient(90deg, #06b6d4 0%, #0891b2 100%);
-    }
-    .progress-bar.workflows {
-      background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
-    }
-
     @media (max-width: 900px) {
       .main-container { max-width: 98vw; }
       .button-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
       .workflow-card { grid-column: span 1; }
-      .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
     }
     @media (max-width: 600px) {
       .event-card { min-width: 90vw; max-width: 98vw; }
@@ -578,9 +451,6 @@
       header h1 { font-size: 2rem; }
       header p { font-size: 1rem; }
       .header { font-size: 1.5rem; }
-      .stats-dashboard { padding: 20px; margin: 20px 2vw; }
-      .stats-grid { grid-template-columns: 1fr; gap: 16px; }
-      .stat-value { font-size: 2rem; }
     }
   </style>
 </head>
@@ -589,76 +459,6 @@
     <h1>PagerDuty Demo - Incidents & Change Events</h1>
     <p>Trigger realistic incidents and send change events to demonstrate PagerDuty workflows.</p>
   </header>
-
-  <!-- Statistics Dashboard -->
-  <div class="main-container">
-    <div class="stats-dashboard">
-      <div class="stats-header">📊 Demo Statistics</div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">🚨</div>
-          <div class="stat-value" id="totalIncidents">0</div>
-          <div class="stat-label">Total Incidents</div>
-          <div class="stat-change positive" id="incidentsChange">+0 this session</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">🔄</div>
-          <div class="stat-value" id="totalChangeEvents">0</div>
-          <div class="stat-label">Change Events</div>
-          <div class="stat-change positive" id="changesChange">+0 this session</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">⚡</div>
-          <div class="stat-value" id="totalWorkflows">0</div>
-          <div class="stat-label">Workflows Run</div>
-          <div class="stat-change positive" id="workflowsChange">+0 this session</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">📈</div>
-          <div class="stat-value" id="multipleFailuresQueue">0</div>
-          <div class="stat-label">Multi-Incident Queue</div>
-          <div class="stat-change neutral" id="queueChange">Ready to send</div>
-        </div>
-      </div>
-
-      <div class="progress-section">
-        <div class="progress-item">
-          <div class="progress-header">
-            <span class="progress-label">Most Used Incident</span>
-            <span class="progress-value" id="topIncidentName">None yet</span>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-bar incidents" id="topIncidentBar" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="progress-item">
-          <div class="progress-header">
-            <span class="progress-label">Most Used Change Event</span>
-            <span class="progress-value" id="topChangeName">None yet</span>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-bar changes" id="topChangeBar" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="progress-item">
-          <div class="progress-header">
-            <span class="progress-label">Session Activity</span>
-            <span class="progress-value" id="sessionActivity">0 actions</span>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-bar" id="sessionBar" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="main-container">
     <div class="header">📋 Incident Scenarios</div>
     <div class="button-grid" id="scenarioGrid" aria-label="Incident Scenarios"></div>
@@ -677,129 +477,6 @@
     </div>
   </div>
   <script>
-    // Statistics tracking
-    const stats = {
-      totalIncidents: 0,
-      totalChangeEvents: 0,
-      totalWorkflows: 0,
-      multipleFailuresQueue: 0,
-      incidentCounts: {},
-      changeEventCounts: {},
-      sessionStart: Date.now()
-    };
-
-    // Load stats from localStorage
-    function loadStats() {
-      const saved = localStorage.getItem('pdDemoStats');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        Object.assign(stats, parsed);
-        stats.sessionStart = Date.now(); // Reset session start
-      }
-      updateStatsDisplay();
-    }
-
-    // Save stats to localStorage
-    function saveStats() {
-      localStorage.setItem('pdDemoStats', JSON.stringify(stats));
-    }
-
-    // Update statistics display
-    function updateStatsDisplay() {
-      document.getElementById('totalIncidents').textContent = stats.totalIncidents;
-      document.getElementById('totalChangeEvents').textContent = stats.totalChangeEvents;
-      document.getElementById('totalWorkflows').textContent = stats.totalWorkflows;
-      document.getElementById('multipleFailuresQueue').textContent = stats.multipleFailuresQueue;
-
-      document.getElementById('incidentsChange').textContent = `+${stats.totalIncidents} this session`;
-      document.getElementById('changesChange').textContent = `+${stats.totalChangeEvents} this session`;
-      document.getElementById('workflowsChange').textContent = `+${stats.totalWorkflows} this session`;
-
-      if (stats.multipleFailuresQueue > 0) {
-        document.getElementById('queueChange').textContent = `${stats.multipleFailuresQueue} pending`;
-        document.getElementById('queueChange').className = 'stat-change positive';
-      } else {
-        document.getElementById('queueChange').textContent = 'Ready to send';
-        document.getElementById('queueChange').className = 'stat-change neutral';
-      }
-
-      // Update progress bars
-      updateProgressBars();
-    }
-
-    // Update progress bars
-    function updateProgressBars() {
-      // Find most used incident
-      let topIncident = null;
-      let maxIncidentCount = 0;
-      for (const [id, count] of Object.entries(stats.incidentCounts)) {
-        if (count > maxIncidentCount) {
-          maxIncidentCount = count;
-          topIncident = id;
-        }
-      }
-
-      if (topIncident) {
-        const scenario = scenarios.find(s => s.id === topIncident);
-        document.getElementById('topIncidentName').textContent = scenario ? `${scenario.title} (${maxIncidentCount})` : `${maxIncidentCount} uses`;
-        const percentage = Math.min((maxIncidentCount / Math.max(stats.totalIncidents, 1)) * 100, 100);
-        document.getElementById('topIncidentBar').style.width = `${percentage}%`;
-      }
-
-      // Find most used change event
-      let topChange = null;
-      let maxChangeCount = 0;
-      for (const [id, count] of Object.entries(stats.changeEventCounts)) {
-        if (count > maxChangeCount) {
-          maxChangeCount = count;
-          topChange = id;
-        }
-      }
-
-      if (topChange) {
-        const changeEvent = changeEvents.find(c => c.id === topChange);
-        document.getElementById('topChangeName').textContent = changeEvent ? `${changeEvent.title} (${maxChangeCount})` : `${maxChangeCount} uses`;
-        const percentage = Math.min((maxChangeCount / Math.max(stats.totalChangeEvents, 1)) * 100, 100);
-        document.getElementById('topChangeBar').style.width = `${percentage}%`;
-      }
-
-      // Session activity
-      const totalActions = stats.totalIncidents + stats.totalChangeEvents + stats.totalWorkflows;
-      document.getElementById('sessionActivity').textContent = `${totalActions} actions`;
-      const sessionPercentage = Math.min((totalActions / 50) * 100, 100); // Cap at 50 actions for 100%
-      document.getElementById('sessionBar').style.width = `${sessionPercentage}%`;
-    }
-
-    // Track incident trigger
-    function trackIncident(scenarioId) {
-      stats.totalIncidents++;
-      stats.incidentCounts[scenarioId] = (stats.incidentCounts[scenarioId] || 0) + 1;
-      saveStats();
-      updateStatsDisplay();
-    }
-
-    // Track change event
-    function trackChangeEvent(eventId) {
-      stats.totalChangeEvents++;
-      stats.changeEventCounts[eventId] = (stats.changeEventCounts[eventId] || 0) + 1;
-      saveStats();
-      updateStatsDisplay();
-    }
-
-    // Track workflow
-    function trackWorkflow() {
-      stats.totalWorkflows++;
-      saveStats();
-      updateStatsDisplay();
-    }
-
-    // Update multiple failures queue
-    function updateMultipleFailuresQueue(count) {
-      stats.multipleFailuresQueue = count;
-      saveStats();
-      updateStatsDisplay();
-    }
-
     const scenarios = [
       {
         id: 'label_printer_offline',
@@ -1310,10 +987,6 @@
               });
 
               Promise.all(promises).then(() => {
-                // Track incidents for this wave
-                otherScenariosWithKeys.forEach(s => trackIncident(s.id));
-                updateMultipleFailuresQueue(totalWaves - waveCount);
-
                 if (waveCount < totalWaves) {
                   // Schedule next wave with countdown
                   let countdown = 10;
@@ -1331,14 +1004,12 @@
                   }, 10000);
                 } else {
                   // All waves complete
-                  updateMultipleFailuresQueue(0);
                   triggerBtn.dataset.running = 'false';
                   triggerBtn.disabled = false;
                   triggerBtn.textContent = 'Launch Incident';
                   showModal('success', 'Events Sent Successfully', `All ${totalWaves} waves of incidents have been triggered for: ${scenarioNames}`);
                 }
               }).catch(err => {
-                updateMultipleFailuresQueue(0);
                 triggerBtn.dataset.running = 'false';
                 triggerBtn.disabled = false;
                 triggerBtn.textContent = 'Launch Incident';
@@ -1391,7 +1062,6 @@
           .then(async response => {
             const data = await response.json();
             if (response.ok && data.status === 'success') {
-              trackIncident(scenario.id); // Track successful incident
               showModal('success', 'Incident Triggered', 'PagerDuty incident triggered successfully.');
             } else {
               let msg = 'Failed to trigger incident.';
@@ -1572,7 +1242,6 @@
           .then(async response => {
             const data = await response.json();
             if (response.ok && data.status === 'success') {
-              trackChangeEvent(scenario.id); // Track successful change event
               showModal('success', 'Change Event Sent', 'PagerDuty change event sent successfully.');
             } else {
               let msg = 'Failed to send change event.';
@@ -1699,7 +1368,6 @@
               triggerBtn.disabled = false;
               triggerBtn.textContent = 'Run Workflow';
               statusDiv.textContent = 'Ready to run';
-              trackWorkflow(); // Track workflow completion
               statusDiv.style.color = '#059669';
               showModal('success', 'Workflow Complete', 'All steps have been executed successfully. Check PagerDuty to see the correlation!');
               return;
@@ -1757,13 +1425,6 @@
                 throw new Error(data.errors ? data.errors.join(' ') : 'Failed to execute step');
               }
 
-              // Track the action
-              if (step.action === 'send_change_event') {
-                trackChangeEvent(scenario.id);
-              } else if (step.action === 'trigger_incident') {
-                trackIncident(scenario.id);
-              }
-
               // Wait for delay if specified
               if (step.delay_after > 0) {
                 let countdown = step.delay_after / 1000;
@@ -1797,9 +1458,6 @@
         grid.appendChild(card);
       });
     }
-
-    // Initialize stats on page load
-    loadStats();
 
     renderScenarioGrid();
     renderChangeEventGrid();
