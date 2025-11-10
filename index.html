@@ -1530,5 +1530,147 @@
     renderChangeEventGrid();
     renderWorkflowGrid();
   </script>
+
+  <!-- Custom Change Event Transformer (Jenkins) -->
+  <div class="main-container">
+    <div class="header" style="margin-top: 16px;">🧰 Custom Change Event Transformer (Jenkins)</div>
+    <div class="button-grid" aria-label="Custom Change Event Transformer">
+      <div class="event-card change-event-card" id="cctr-card">
+        <img class="product-img" src="https://via.placeholder.com/400x140/0891b2/ffffff?text=Jenkins+Transformer" alt="Custom Change Event Transformer">
+        <div class="event-title">Test Your Transformer Endpoint</div>
+
+        <div class="key-section">
+          <label class="key-label" for="cctr-endpoint">Transformer Endpoint (POST URL)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="cctr-endpoint" type="url" placeholder="https://your-domain.example.com/change-transformer" />
+            <button class="key-btn" id="cctr-save" type="button">Save</button>
+            <button class="key-btn key-clear-btn" id="cctr-clear" type="button">Clear</button>
+          </div>
+          <div class="key-status" id="cctr-status" aria-live="polite"></div>
+        </div>
+
+        <div class="key-section">
+          <label class="key-label" for="cctr-payload">Preloaded Jenkins Payload</label>
+          <textarea id="cctr-payload" rows="12" style="width: 90%; margin: 0 auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; background: #f9fafb; color: #111827;"></textarea>
+        </div>
+
+        <button class="trigger-btn" id="cctr-send" type="button" style="margin-top: 12px;">Send to Transformer</button>
+        <small style="display:block;text-align:center;color:#6b7280;">We will POST this payload to your transformer and log the response to the console.</small>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === Custom Change Event Transformer (Jenkins) Demo ===
+    (function() {
+      const KEY = 'cctr_endpoint_v1';
+      const el = (id) => document.getElementById(id);
+      const status = (msg, isError=false) => {
+        const s = el('cctr-status');
+        if (!s) return;
+        s.textContent = msg || '';
+        s.style.color = isError ? '#e53e3e' : '#059669';
+      };
+      const load = () => { try { return localStorage.getItem(KEY) || ''; } catch { return ''; } };
+      const save = (v) => { try { localStorage.setItem(KEY, v || ''); return true; } catch { return false; } };
+
+      const jenkinsSample = {
+        name: 'jenkins',
+        summary: 'Jenkins Build Completed',
+        source: 'jenkins',
+        timestamp: new Date().toISOString(),
+        custom_details: {
+          build: {
+            full_url: 'https://jenkins.example.com/job/my-service/123/',
+            number: 123,
+            phase: 'COMPLETED',
+            status: 'SUCCESS',
+            scm: {
+              branch: 'main',
+              commit: 'a1b2c3d4e5f6g7h8i9j0',
+              url: 'https://github.com/acme/my-service/commit/a1b2c3d'
+            },
+            project: 'my-service',
+            duration_ms: 45892,
+            user: 'jenkins'
+          },
+          deployment: {
+            environment: 'staging',
+            service: 'my-service',
+            version: 'v1.4.7',
+            changelog_url: 'https://github.com/acme/my-service/releases/tag/v1.4.7'
+          }
+        }
+      };
+
+      function init() {
+        const endpointInput = el('cctr-endpoint');
+        const saveBtn = el('cctr-save');
+        const clearBtn = el('cctr-clear');
+        const payloadTA = el('cctr-payload');
+        const sendBtn = el('cctr-send');
+        if (!endpointInput || !saveBtn || !clearBtn || !payloadTA || !sendBtn) return;
+
+        endpointInput.value = load();
+        payloadTA.value = JSON.stringify(jenkinsSample, null, 2);
+
+        saveBtn.addEventListener('click', () => {
+          const url = (endpointInput.value || '').trim();
+          if (!url) return status('Please enter a valid URL', true);
+          try { new URL(url); } catch { return status('Endpoint must be a valid URL', true); }
+          save(url);
+          status('Endpoint saved');
+        });
+
+        clearBtn.addEventListener('click', () => {
+          endpointInput.value = '';
+          save('');
+          status('Endpoint cleared');
+        });
+
+        sendBtn.addEventListener('click', async () => {
+          const url = (endpointInput.value || '').trim();
+          if (!url) return status('Set the transformer endpoint first', true);
+          let body;
+          try {
+            body = JSON.parse(payloadTA.value);
+          } catch {
+            return status('Payload is not valid JSON', true);
+          }
+          sendBtn.disabled = true;
+          sendBtn.textContent = 'Sending...';
+          status('Sending...');
+          try {
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+            const text = await res.text();
+            let display = text;
+            try { display = JSON.stringify(JSON.parse(text), null, 2); } catch {}
+            if (res.ok) {
+              status('Success! See console for response.');
+              console.log('[Transformer OK]', display);
+            } else {
+              status(`Error ${res.status}. See console for details.`, true);
+              console.error('[Transformer ERROR]', display);
+            }
+          } catch (e) {
+            status(`Network/CORS error: ${e.message}`, true);
+          } finally {
+            sendBtn.disabled = false;
+            sendBtn.textContent = 'Send to Transformer';
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
 </body>
 </html>
