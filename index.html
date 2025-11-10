@@ -673,60 +673,108 @@
       }
     ];
 
+    // Topic-based helpers for rich, correlated change events using only Change Event keys
+    const TOPIC_CONFIG = {
+      topic: "Checkout Latency Spike – fastpath rollout",
+      correlation_id: () => `topic-checkout-latency-${new Date().toISOString().slice(0,10)}`,
+      burstScenarioId: 'change_production_deploy',
+      incidentKeyScenarioId: 'change_production_deploy',
+      count: 10,
+      intervalMs: 3000
+    };
+
+    function generateTopicChangePayload(idx, total, baseScenario, topicCfg) {
+      const ts = new Date(Date.now() - (total - idx) * 1000).toISOString();
+      const regions = ['us-east-1','us-west-2','eu-central-1','ap-southeast-1'];
+      const region = regions[idx % regions.length];
+      const build = `checkout-${(new Date().getUTCFullYear())}.${4 + (idx%3)}.${idx}`;
+      const commit = Math.random().toString(16).slice(2,9);
+      const pr = 120 + idx;
+      const ticket = `CHKO-${430 + idx}`;
+      const corrId = topicCfg.correlation_id();
+
+      const summary = `[Topic:${topicCfg.topic}] Change ${idx+1}/${total} – fastpath=${idx%2===0?'enabled':'canary'}; region=${region}; build=${build}; commit=${commit}; PR#${pr}; ticket=${ticket}; corrId=${corrId}`;
+      const custom = {
+        ...baseScenario.payload.custom_details,
+        topic: topicCfg.topic,
+        correlation_id: corrId,
+        region,
+        build,
+        commit_sha: commit,
+        pr_number: pr,
+        ticket,
+        environment: 'production',
+        service: 'checkout-service',
+        feature_flag: 'fastpath',
+        metrics: { p95_latency_ms: 220 + idx*7, error_rate_pct: +(0.3 * idx).toFixed(1) },
+        links: [
+          { href: `https://example.com/pr/${pr}`, text: `PR #${pr}` },
+          { href: `https://example.com/tickets/${ticket}`, text: ticket }
+        ]
+      };
+
+      return {
+        routing_key: getIntegrationKey(baseScenario.id),
+        payload: {
+          summary,
+          source: baseScenario.payload.source,
+          timestamp: ts,
+          custom_details: custom
+        }
+      };
+    }
+
+    function generateTopicIncidentPayload(baseScenario, topicCfg) {
+      const corrId = topicCfg.correlation_id();
+      const summary = `[Incident] ${topicCfg.topic} – Elevated p95 on Checkout post-deploy; suspect fastpath flag interaction. corrId=${corrId}. Recent changes in same service/regions present.`;
+      return {
+        routing_key: getIntegrationKey(baseScenario.id), // using a Change Event key per request
+        event_action: 'trigger',
+        client: 'Change Events Demo',
+        client_url: window.location.href,
+        payload: {
+          summary,
+          severity: 'critical',
+          source: 'synthetic-monitor',
+          custom_details: {
+            topic: topicCfg.topic,
+            correlation_id: corrId,
+            observed_metrics: { p95_latency_ms: 380, error_rate_pct: 4.7 },
+            suspected_change: "fastpath enabled with reduced timeouts",
+            service: 'checkout-service',
+            environment: 'production'
+          }
+        }
+      };
+    }
+
+
     // Demo Workflow Scenarios
     const workflowScenarios = [
       {
-        id: 'workflow_deploy_then_incident',
-        title: '🎯 Workflow 1: Deployment Causes Incident',
-        desc: 'Quick Demo (90 seconds)',
+        id: 'workflow_topic_change_burst_incident',
+        title: '🎯 Topic: Checkout Latency Spike → 10 changes then 1 incident',
+        desc: 'Uses only Change Event keys with context-rich summaries',
         location: 'Automated Workflow',
         locationClass: 'scenario-location',
-        img: 'https://via.placeholder.com/400x140/7c3aed/ffffff?text=Workflow+1',
-        alt: 'Deploy Then Incident Workflow',
+        img: 'https://via.placeholder.com/400x140/7c3aed/ffffff?text=Topic+Burst',
+        alt: 'Topic Burst Workflow',
         isWorkflow: true,
+        topicConfig: TOPIC_CONFIG,
         steps: [
-          {
-            action: 'send_change_event',
-            scenario_id: 'change_production_deploy',
-            delay_after: 30000
-          },
-          {
-            action: 'trigger_incident',
-            scenario_id: 'checkout_404',
-            delay_after: 0
-          }
-        ]
-      },
-      {
-        id: 'workflow_multiple_changes',
-        title: '🎯 Workflow 2: Multiple Changes Before Incident',
-        desc: 'Realistic Demo (2 minutes)',
-        location: 'Automated Workflow',
-        locationClass: 'scenario-location',
-        img: 'https://via.placeholder.com/400x140/7c3aed/ffffff?text=Workflow+2',
-        alt: 'Multiple Changes Workflow',
-        isWorkflow: true,
-        steps: [
-          {
-            action: 'send_change_event',
-            scenario_id: 'change_frontend_deploy',
-            delay_after: 15000
-          },
-          {
-            action: 'send_change_event',
-            scenario_id: 'change_production_deploy',
-            delay_after: 15000
-          },
-          {
-            action: 'send_change_event',
-            scenario_id: 'change_database_migration',
-            delay_after: 30000
-          },
-          {
-            action: 'trigger_incident',
-            scenario_id: 'load_balancer_error',
-            delay_after: 0
-          }
+          // Send 10 related change events to the same service/key
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: TOPIC_CONFIG.intervalMs },
+          { action: 'send_change_event', scenario_id: TOPIC_CONFIG.burstScenarioId, delay_after: 0 },
+          // Then trigger a single incident using one of the change event keys
+          { action: 'trigger_incident', scenario_id: TOPIC_CONFIG.incidentKeyScenarioId, delay_after: 0 }
         ]
       }
     ];
@@ -1293,10 +1341,10 @@
           const li = document.createElement('li');
           if (step.action === 'send_change_event') {
             const changeScenario = changeEventScenarios.find(s => s.id === step.scenario_id);
-            li.textContent = `Send: ${changeScenario ? changeScenario.title : step.scenario_id}`;
+            li.textContent = `Send Change: ${changeScenario ? changeScenario.title : step.scenario_id}`;
           } else if (step.action === 'trigger_incident') {
-            const incidentScenario = scenarios.find(s => s.id === step.scenario_id);
-            li.textContent = `Trigger: ${incidentScenario ? incidentScenario.title : step.scenario_id}`;
+            const incScenario = scenarios.find(s => s.id === step.scenario_id) || changeEventScenarios.find(s => s.id === step.scenario_id);
+            li.textContent = `Trigger Incident (using CE key): ${incScenario ? incScenario.title : step.scenario_id}`;
           }
           if (step.delay_after > 0) {
             li.textContent += ` → Wait ${step.delay_after / 1000}s`;
@@ -1323,15 +1371,20 @@
         // Check if all required scenarios have keys
         function checkWorkflowReady() {
           const requiredScenarios = workflow.steps.map(step => {
-            if (step.action === 'send_change_event') {
-              return changeEventScenarios.find(s => s.id === step.scenario_id);
-            } else if (step.action === 'trigger_incident') {
-              return scenarios.find(s => s.id === step.scenario_id);
+            if (step.action === 'send_change_event' || step.action === 'trigger_incident') {
+              return changeEventScenarios.find(s => s.id === step.scenario_id) || scenarios.find(s => s.id === step.scenario_id);
             }
             return null;
           }).filter(s => s !== null);
 
-          const missingKeys = requiredScenarios.filter(s => !getIntegrationKey(s.id));
+          // De-duplicate scenarios
+          const uniqueRequired = [];
+          const seen = new Set();
+          for (const s of requiredScenarios) {
+            if (!seen.has(s.id)) { seen.add(s.id); uniqueRequired.push(s); }
+          }
+
+          const missingKeys = uniqueRequired.filter(s => !getIntegrationKey(s.id));
 
           if (missingKeys.length > 0) {
             triggerBtn.disabled = true;
@@ -1387,33 +1440,44 @@
               statusDiv.textContent = `Step ${stepIndex + 1}/${workflow.steps.length}: Sending ${scenario.title}...`;
               statusDiv.style.color = '#2563eb';
 
-              payload = {
-                routing_key: getIntegrationKey(scenario.id),
-                payload: {
-                  summary: scenario.payload.summary,
-                  source: scenario.payload.source,
-                  timestamp: typeof scenario.payload.timestamp === 'function' ? scenario.payload.timestamp() : scenario.payload.timestamp,
-                  custom_details: scenario.payload.custom_details
-                }
-              };
+              // If workflow defines a topic, generate rich, correlated payloads
+              if (workflow.topicConfig) {
+                const idx = stepIndex; // step index maps to sequence
+                payload = generateTopicChangePayload(idx, workflow.topicConfig.count, scenario, workflow.topicConfig);
+              } else {
+                payload = {
+                  routing_key: getIntegrationKey(scenario.id),
+                  payload: {
+                    summary: scenario.payload.summary,
+                    source: scenario.payload.source,
+                    timestamp: typeof scenario.payload.timestamp === 'function' ? scenario.payload.timestamp() : scenario.payload.timestamp,
+                    custom_details: scenario.payload.custom_details
+                  }
+                };
+              }
             } else if (step.action === 'trigger_incident') {
-              scenario = scenarios.find(s => s.id === step.scenario_id);
+              // Allow triggering incidents using a Change Event key per request
+              scenario = scenarios.find(s => s.id === step.scenario_id) || changeEventScenarios.find(s => s.id === step.scenario_id);
               endpoint = 'https://events.pagerduty.com/v2/enqueue';
-              statusDiv.textContent = `Step ${stepIndex + 1}/${workflow.steps.length}: Triggering ${scenario.title}...`;
+              statusDiv.textContent = `Step ${stepIndex + 1}/${workflow.steps.length}: Triggering incident using ${scenario.title} key...`;
               statusDiv.style.color = '#2563eb';
 
-              payload = {
-                routing_key: getIntegrationKey(scenario.id),
-                event_action: 'trigger',
-                client: 'Change Events Demo',
-                client_url: window.location.href,
-                payload: {
-                  summary: scenario.payload.summary,
-                  severity: scenario.payload.severity,
-                  source: scenario.payload.source,
-                  custom_details: scenario.payload.custom_details
-                }
-              };
+              if (workflow.topicConfig && changeEventScenarios.find(s => s.id === step.scenario_id)) {
+                payload = generateTopicIncidentPayload(scenario, workflow.topicConfig);
+              } else {
+                payload = {
+                  routing_key: getIntegrationKey(scenario.id),
+                  event_action: 'trigger',
+                  client: 'Change Events Demo',
+                  client_url: window.location.href,
+                  payload: {
+                    summary: (scenario.payload && scenario.payload.summary) || 'Demo Incident',
+                    severity: (scenario.payload && scenario.payload.severity) || 'critical',
+                    source: (scenario.payload && scenario.payload.source) || 'demo',
+                    custom_details: (scenario.payload && scenario.payload.custom_details) || {}
+                  }
+                };
+              }
             }
 
             try {
