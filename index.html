@@ -1672,5 +1672,377 @@
       }
     })();
   </script>
+
+  <!-- External Endpoints to PagerDuty -->
+  <div class="main-container" id="externalEndpoints">
+    <div class="header" style="margin-top: 48px;">🌐 External Endpoints to PagerDuty</div>
+    <p style="text-align:center;color:#6b7280;margin:8px 0 20px;">
+      Save the appropriate integration key per card, then use the buttons to fire events into PagerDuty at the right time in your demo.
+    </p>
+
+    <div class="button-grid" aria-label="External Endpoints">
+
+      <!-- Cache Variables Demo: Query Gateway -->
+      <div class="event-card" id="ext-cache-demo">
+        <img class="product-img" src="https://via.placeholder.com/400x140/2563eb/ffffff?text=Cache+Variables+Demo" alt="Cache Variables Demo">
+        <div class="event-title">Cache Variables Demo (Query Gateway)</div>
+
+        <div class="key-section">
+          <label class="key-label" for="ext-key-qgw">Integration Key (Query Gateway)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="ext-key-qgw" type="password" placeholder="Paste Events API v2 key for Query Gateway">
+            <button class="key-btn" id="ext-save-qgw" type="button">Save</button>
+            <button class="key-btn key-clear-btn" id="ext-clear-qgw" type="button">Clear</button>
+          </div>
+          <div class="key-status" id="ext-status-qgw"></div>
+        </div>
+
+        <div class="key-section">
+          <label class="key-label">Endpoint/Host (used to form the cache key)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="ext-qgw-endpoint" type="text" value="/customer/search">
+            <input class="key-input" id="ext-qgw-source" type="text" value="qgw-01">
+          </div>
+          <small style="color:#6b7280;">Recommended demo order: Step 1 → Step 2 (wait 60s) → Step 3</small>
+        </div>
+
+        <button class="trigger-btn" id="btn-cache-step1" type="button">Cache Step 1: Send 2 alerts</button>
+        <button class="trigger-btn" id="btn-cache-step2" type="button">Cache Step 2: Start 60s wait</button>
+        <button class="trigger-btn" id="btn-cache-step3" type="button">Cache Step 3: Send burst (5)</button>
+
+        <div class="key-section">
+          <label class="key-label" for="ext-burst-count">Burst size (5–10)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="ext-burst-count" type="number" min="5" max="10" value="5">
+            <button class="key-btn" id="btn-cache-step3-10" type="button">Send burst (10)</button>
+          </div>
+          <div class="key-status" id="ext-cache-status" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <!-- Ingest Pipeline: Dependency error -->
+      <div class="event-card" id="ext-ingest">
+        <img class="product-img" src="https://via.placeholder.com/400x140/059669/ffffff?text=Ingest+Dependency+Error" alt="Ingest Dependency Error">
+        <div class="event-title">Ingest Pipeline: Dependency Error</div>
+
+        <div class="key-section">
+          <label class="key-label" for="ext-key-ingest">Integration Key (Ingest Pipeline)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="ext-key-ingest" type="password" placeholder="Paste Events API v2 key for Ingest Pipeline">
+            <button class="key-btn" id="ext-save-ingest" type="button">Save</button>
+            <button class="key-btn key-clear-btn" id="ext-clear-ingest" type="button">Clear</button>
+          </div>
+          <div class="key-status" id="ext-status-ingest"></div>
+        </div>
+
+        <button class="trigger-btn" id="btn-ingest-send" type="button">Send dependency_error</button>
+      </div>
+
+      <!-- Leaf Nodes: Capacity pressure -->
+      <div class="event-card" id="ext-leaf">
+        <img class="product-img" src="https://via.placeholder.com/400x140/f59e0b/ffffff?text=Leaf+Nodes+Capacity" alt="Leaf Nodes Capacity Pressure">
+        <div class="event-title">Leaf Nodes: Capacity Pressure</div>
+
+        <div class="key-section">
+          <label class="key-label" for="ext-key-leaf">Integration Key (Leaf Nodes)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="ext-key-leaf" type="password" placeholder="Paste Events API v2 key for Leaf Nodes">
+            <button class="key-btn" id="ext-save-leaf" type="button">Save</button>
+            <button class="key-btn key-clear-btn" id="ext-clear-leaf" type="button">Clear</button>
+          </div>
+          <div class="key-status" id="ext-status-leaf"></div>
+        </div>
+
+        <button class="trigger-btn" id="btn-leaf-send" type="button">Send capacity_pressure</button>
+      </div>
+
+      <!-- Change Event: Production deploy -->
+      <div class="event-card change-event-card" id="ext-change">
+        <img class="product-img" src="https://via.placeholder.com/400x140/0891b2/ffffff?text=Change+Event" alt="Production Deployment Change">
+        <div class="event-title">Change Event: Production Deployment</div>
+
+        <div class="key-section">
+          <label class="key-label" for="ext-key-change">Integration Key (Change Events)</label>
+          <div class="key-input-row">
+            <input class="key-input" id="ext-key-change" type="password" placeholder="Paste Change Events API key">
+            <button class="key-btn" id="ext-save-change" type="button">Save</button>
+            <button class="key-btn key-clear-change" id="ext-clear-change" type="button">Clear</button>
+          </div>
+          <div class="key-status" id="ext-status-change"></div>
+        </div>
+
+        <button class="trigger-btn" id="btn-change-send" type="button">Send production deploy change</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ---- External Endpoints logic ----
+    (function() {
+      // Local storage helpers (separate namespace to not collide with scenarios)
+      const K = {
+        qgw: 'ext_pd_key_qgw',
+        ingest: 'ext_pd_key_ingest',
+        leaf: 'ext_pd_key_leaf',
+        change: 'ext_pd_key_change'
+      };
+      const $ = (id) => document.getElementById(id);
+      const saveKey = (k, v) => { try { localStorage.setItem(k, v || ''); } catch {} };
+      const getKey  = (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } };
+      const clrKey  = (k) => { try { localStorage.removeItem(k); } catch {} };
+
+      // Status helper
+      const status = (el, msg, ok=true) => {
+        if (!el) return;
+        el.textContent = msg || '';
+        el.classList.toggle('error', !ok);
+        el.style.color = ok ? '#059669' : '#e53e3e';
+      };
+
+      // Generic send to Events API
+      async function sendPdEvent(routing_key, pdPayload) {
+        const res = await fetch('https://events.pagerduty.com/v2/enqueue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            routing_key,
+            event_action: 'trigger',
+            client: 'External Endpoints',
+            client_url: window.location.href,
+            payload: pdPayload
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.status !== 'success') {
+          throw new Error((data.errors && data.errors.join(' ')) || `HTTP ${res.status}`);
+        }
+        return data;
+      }
+
+      // Change Events API
+      async function sendPdChange(routing_key, changePayload) {
+        const res = await fetch('https://events.pagerduty.com/v2/change/enqueue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ routing_key, payload: changePayload })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.status !== 'success') {
+          throw new Error((data.errors && data.errors.join(' ')) || `HTTP ${res.status}`);
+        }
+        return data;
+      }
+
+      // Initialize key UIs
+      function initKey(idInput, idSave, idClear, idStatus, storeKey) {
+        const input = $(idInput), saveBtn = $(idSave), clearBtn = $(idClear), st = $(idStatus);
+        if (!input || !saveBtn || !clearBtn || !st) return;
+        input.value = getKey(storeKey);
+        status(st, input.value ? 'Key saved' : 'No key saved', !!input.value);
+
+        saveBtn.addEventListener('click', () => {
+          const v = (input.value || '').trim();
+          if (v.length < 32) return status(st, 'Key too short', false);
+          saveKey(storeKey, v);
+          status(st, 'Key saved', true);
+        });
+        clearBtn.addEventListener('click', () => {
+          clrKey(storeKey);
+          input.value = '';
+          status(st, 'Key cleared', false);
+        });
+      }
+
+      // Wire key inputs
+      initKey('ext-key-qgw',    'ext-save-qgw',    'ext-clear-qgw',    'ext-status-qgw',    K.qgw);
+      initKey('ext-key-ingest', 'ext-save-ingest', 'ext-clear-ingest', 'ext-status-ingest', K.ingest);
+      initKey('ext-key-leaf',   'ext-save-leaf',   'ext-clear-leaf',   'ext-status-leaf',   K.leaf);
+      initKey('ext-key-change', 'ext-save-change', 'ext-clear-change', 'ext-status-change', K.change);
+
+      // Cache Variables Demo (Query Gateway)
+      const cacheStatus = $('ext-cache-status');
+      const btnStep1 = $('btn-cache-step1');
+      const btnStep2 = $('btn-cache-step2');
+      const btnStep3 = $('btn-cache-step3');
+      const btnStep3_10 = $('btn-cache-step3-10');
+
+      function qgwPayload(endpoint, source) {
+        return {
+          summary: `Query Gateway 5xx spike on ${endpoint}`,
+          severity: 'error',
+          source,
+          component: 'query-gateway',
+          class: 'http_5xx',
+          custom_details: {
+            env: 'prod',
+            cluster: 's2-prod-us-east-1',
+            tenant: 'gold',
+            endpoint,
+            error_rate: +(30 + Math.random() * 10).toFixed(1),
+            threshold: 15
+          }
+        };
+      }
+
+      // Step 1: Send 2 alerts
+      btnStep1?.addEventListener('click', async () => {
+        const key = getKey(K.qgw);
+        if (!key) return showModal('error', 'Missing Key', 'Save the Query Gateway integration key first.');
+        const endpoint = ($('ext-qgw-endpoint')?.value || '/customer/search').trim();
+        const source = ($('ext-qgw-source')?.value || 'qgw-01').trim();
+        btnStep1.disabled = true;
+        status(cacheStatus, 'Sending 2 warm-up alerts...');
+        try {
+          await sendPdEvent(key, qgwPayload(endpoint, source));
+          await sendPdEvent(key, qgwPayload(endpoint, source));
+          status(cacheStatus, 'Warm-up complete: 2 alerts sent (expected: suppressed/no incident).');
+          showModal('success', 'Sent', 'Sent 2 warm-up alerts.');
+        } catch (e) {
+          status(cacheStatus, 'Failed to send warm-up alerts: ' + e.message, false);
+          showModal('error', 'Error', e.message);
+        } finally {
+          btnStep1.disabled = false;
+        }
+      });
+
+      // Step 2: Start 60s wait (countdown)
+      btnStep2?.addEventListener('click', () => {
+        let remain = 60;
+        btnStep2.disabled = true;
+        status(cacheStatus, `Waiting ${remain}s before burst...`);
+        const iv = setInterval(() => {
+          remain--;
+          status(cacheStatus, `Waiting ${remain}s before burst...`);
+          if (remain <= 0) {
+            clearInterval(iv);
+            status(cacheStatus, 'Done waiting 60s. You can send the burst now.');
+            btnStep2.disabled = false;
+            showModal('success', 'Ready', '60 seconds elapsed. Proceed with the burst.');
+          }
+        }, 1000);
+      });
+
+      // Step 3: Send burst (N)
+      async function sendBurst(n) {
+        const key = getKey(K.qgw);
+        if (!key) return showModal('error', 'Missing Key', 'Save the Query Gateway integration key first.');
+        const endpoint = ($('ext-qgw-endpoint')?.value || '/customer/search').trim();
+        const source = ($('ext-qgw-source')?.value || 'qgw-01').trim();
+        const max = Math.max(5, Math.min(10, n || 5));
+        btnStep3.disabled = true; btnStep3_10.disabled = true;
+        status(cacheStatus, `Sending burst of ${max} alerts...`);
+        try {
+          const sends = [];
+          for (let i = 0; i < max; i++) {
+            // small jitter to simulate burst
+            await new Promise(r => setTimeout(r, 150 + Math.random()*150));
+            sends.push(sendPdEvent(key, qgwPayload(endpoint, source)));
+          }
+          await Promise.all(sends);
+          status(cacheStatus, `Burst sent: ${max} alerts (expected: 1 incident, alerts grouped).`);
+          showModal('success', 'Burst Sent', `Sent ${max} alerts.`);
+        } catch (e) {
+          status(cacheStatus, 'Failed to send burst: ' + e.message, false);
+          showModal('error', 'Error', e.message);
+        } finally {
+          btnStep3.disabled = false; btnStep3_10.disabled = false;
+        }
+      }
+      btnStep3?.addEventListener('click', () => {
+        const n = parseInt(($('ext-burst-count')?.value || '5'), 10);
+        sendBurst(n);
+      });
+      btnStep3_10?.addEventListener('click', () => sendBurst(10));
+
+      // Ingest dependency_error
+      $('btn-ingest-send')?.addEventListener('click', async () => {
+        const key = getKey(K.ingest);
+        if (!key) return showModal('error', 'Missing Key', 'Save the Ingest Pipeline integration key first.');
+        const pdPayload = {
+          summary: 'Ingest lag increasing: dependency timeout to Query Gateway',
+          severity: 'error',
+          source: 'ingest-worker-05',
+          component: 'ingest-pipeline',
+          class: 'dependency_error',
+          custom_details: {
+            env: 'prod',
+            cluster: 's2-prod-us-east-1',
+            tenant: 'gold',
+            dependency: 'query-gateway',
+            lag_seconds: 120 + Math.floor(Math.random()*60)
+          }
+        };
+        const btn = $('btn-ingest-send');
+        btn.disabled = true;
+        try {
+          await sendPdEvent(key, pdPayload);
+          showModal('success', 'Event Sent', 'Ingest dependency_error sent.');
+        } catch (e) {
+          showModal('error', 'Error', e.message);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+
+      // Leaf Nodes capacity_pressure
+      $('btn-leaf-send')?.addEventListener('click', async () => {
+        const key = getKey(K.leaf);
+        if (!key) return showModal('error', 'Missing Key', 'Save the Leaf Nodes integration key first.');
+        const pdPayload = {
+          summary: 'Leaf nodes disk utilization > 90%',
+          severity: 'error',
+          source: 'leaf-03',
+          component: 'leaf-nodes',
+          class: 'capacity_pressure',
+          custom_details: {
+            env: 'prod',
+            cluster: 's2-prod-us-east-1',
+            tenant: 'gold'
+          }
+        };
+        const btn = $('btn-leaf-send');
+        btn.disabled = true;
+        try {
+          await sendPdEvent(key, pdPayload);
+          showModal('success', 'Event Sent', 'Leaf Nodes capacity_pressure sent.');
+        } catch (e) {
+          showModal('error', 'Error', e.message);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+
+      // Change Event: Production deploy
+      $('btn-change-send')?.addEventListener('click', async () => {
+        const key = getKey(K.change);
+        if (!key) return showModal('error', 'Missing Key', 'Save the Change Events integration key first.');
+        const changePayload = {
+          summary: 'Production deployment: SingleStore Query Gateway v2.4.0',
+          source: 'github-actions',
+          timestamp: new Date().toISOString(),
+          custom_details: {
+            version: 'v2.4.0',
+            service: 'query-gateway',
+            environment: 'production',
+            deployed_by: 'deploy-bot',
+            commit_sha: Math.random().toString(16).slice(2,9),
+            repository: 'singlestore/query-gateway',
+            changes: 'Fastpath enabled; timeout adjustments; minor perf tuning'
+          }
+        };
+        const btn = $('btn-change-send');
+        btn.disabled = true;
+        try {
+          await sendPdChange(key, changePayload);
+          showModal('success', 'Change Sent', 'Production deploy change event sent.');
+        } catch (e) {
+          showModal('error', 'Error', e.message);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
